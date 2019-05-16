@@ -52,6 +52,17 @@ class DragonContainer extends Component {
 
 	render() {
 
+// the plan:
+// dragon container will control all state
+// unused recipes will go into its own container => need to create unused container and populate it with recipe tiles
+// used recipes will be mapped into recipe tiles, but first they should go into day containers... and meal container? yeah. wait, no. how about build the div with three tiles in it? hmmmm
+
+// definitions:
+// ok so dragon container is the top level parent
+// unused container is inside dragon container, it has recipe tiles
+// a recipe contains food data
+// a meal is a time to eat (3/day)
+// a day is the day of the week
 
 		let recipes = {
 			unused: [],
@@ -64,6 +75,8 @@ class DragonContainer extends Component {
 			saturday: []
 		}
 
+
+		// this should be moved a layer down?
 		this.state.recipes.forEach ((r) => {
 			recipes[r.used].push(
 				<div 
