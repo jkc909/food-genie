@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, IndexRoute, Router, browserHistory, Link } from "react-router";
-import WeekContainer from "../../containers/WeekContainer";
 import DragonContainer from "../../containers/DragonContainer";
 
 const App = props => {
