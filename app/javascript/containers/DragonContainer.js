@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import RecipeTile from "../tiles/RecipeTile";
 import DayContainer from "./DayContainer"
 import RecipeContainer from "./RecipeContainer"
+import UnusedContainer from "./UnusedContainer"
 
 
 class DragonContainer extends Component {
@@ -23,24 +24,31 @@ class DragonContainer extends Component {
 						bgcolor: "red"},
 					{name: "recp3",
 						used: "unused",
-						bgcolor: "blue"}]
+						bgcolor: "red"}]
 		});
 	};
 
 	onDragStart = (ev, id) => {
-		console.log('dragstart:', id);
 		ev.dataTransfer.setData("id", id);
 	};
 
 	onDragOver = (ev) => {
+		// if classname like draggable, update the style
 		ev.preventDefault();
+		ev.target.style.background = "purple"
+	};
+
+	onDragLeave = (ev) => {
+		ev.preventDefault();
+		ev.target.style.background = ""
 	};
 
 	onDrop = (ev, cat) => {       
   let id = ev.dataTransfer.getData("id");
   let recipes = this.state.recipes.filter((recipe) => {
       if (recipe.name == id) {
-               recipe.used = cat;           
+               recipe.used = cat;
+               recipe.bgcolor = "green"           
       }              
        return recipe;       
    });        
@@ -74,64 +82,60 @@ class DragonContainer extends Component {
 			friday: [],
 			saturday: []
 		}
-
-
-		// this should be moved a layer down?
 		this.state.recipes.forEach ((r) => {
 			recipes[r.used].push(
 				<div 
 					key={r.name}
 					onDragStart={(e)=>this.onDragStart(e, r.name)}
 					draggable
-					className="draggable"
-					style = {{backgroundColor:r.bgcolor}}
+					className="dragon-box draggable"
+					style={{backgroundColor:r.bgcolor}}
 				>
 				{r.name}
 				</div>
-				);
-			// used_recipes = recipes.filter(r => r.used = "unused");
+			);
 		});
+
+
+
+
 
 		return (
 			<div className="container-drag">
     		<h2 className="header">Drag a Recipe</h2>
-					<div className="unused" 
-					 onDragOver={(e)=>this.onDragOver(e)}
-					 onDrop={(e)=>{this.onDrop(e, "unused")}}>
-
-					<span className="task-header">Unused</span>
-
-					{recipes.unused}  
-
-					</div>
-
-
-					<div className="row">
-
-					<div className="small-7 medium-7 large-7 columns droppable"
-					onDragOver={(e)=>this.onDragOver(e)}
-
-					onDrop={(e)=>this.onDrop(e, "sunday")}>
-
-					<span className="task-header">Sunday</span>
-
-					{recipes.sunday}                
-					</div>   
+    				<div className="row">
+							<div className="small-7 medium-7 large-7 columns droppable"
+							onDragOver={(e)=>this.onDragOver(e)}
+							onDragLeave={(e)=>this.onDragLeave(e)}
+							onDrop={(e)=>this.onDrop(e, "sunday")}>
+								<span className="task-header">Sunday</span>
+									{recipes.sunday}                
+							</div>   
 
 
-					<div className="small-7 medium-7 large-7 columns droppable"
-					onDragOver={(e)=>this.onDragOver(e)}
+							<div className="small-7 medium-7 large-7 columns droppable"
+							onDragOver={(e)=>this.onDragOver(e)}
+							onDragLeave={(e)=>this.onDragLeave(e)}
+							onDrop={(e)=>this.onDrop(e, "monday")}>
 
-					onDrop={(e)=>this.onDrop(e, "monday")}>
+							<span className="task-header">Monday</span>
 
-					<span className="task-header">Monday</span>
+							{recipes.monday}                
+							</div> 
 
-					{recipes.monday}                
-					</div> 
 
 
 
  </div>
+					<div>
+					
+					<UnusedContainer
+						recipes={recipes.unused}
+						onDragOver={this.onDragOver}
+						onDragLeave={this.onDragLeave}
+						onDrop={this.onDrop}
+						/>
+					</div>
  </div>
 		);
 	}
