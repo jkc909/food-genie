@@ -1,13 +1,14 @@
 import React from "react";
 
 const RecipeTile = props => {
+
 	return (
 		<div
-			key={props.name} 
-			className="dragon-box draggable"
+			key={props.name}
+			className={props.className}
 			draggable
-			style = {{backgroundColor:props.bgcolor}}
-			onDragStart={(e) => this.OnDragStart(e, props.name)}
+			style = {props.style}
+			onDragStart={props.OnDragStart}
 		/>
 	)
 };

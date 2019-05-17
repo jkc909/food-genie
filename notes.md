@@ -18,6 +18,12 @@ url = URI.parse("https://www.food2fork.com/api/search?key=d9c7bcab0e61e00398fd0a
 response = Net::HTTP.get(url)
 hash = JSON.parse response
 
+url = URI.parse("https://api.edamam.com/search?q=chicken&app_id=95a81719&app_key=e70d6d42019bc25878c26db82ac42248")
+response = Net::HTTP.get(url)
+hash = JSON.parse response
+
+
+
 
 http = Net::HTTP.new(url.host, url.port)
 http.use_ssl = true

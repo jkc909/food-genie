@@ -3,19 +3,14 @@ import RecipeTile from "../tiles/RecipeTile";
 import DayContainer from "./DayContainer"
 import RecipeContainer from "./RecipeContainer"
 import UnusedContainer from "./UnusedContainer"
-
+import MealContainer from "./MealContainer"
 
 class DragonContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			recipes: []
-		};
-	};
-	
-	componentDidMount() {
-		this.setState({
-			recipes: 
+			// recipes: [] });
+			recipes:
 					[{name: "recp1",
 						used: "unused",
 						bgcolor: "red"},
@@ -25,6 +20,21 @@ class DragonContainer extends Component {
 					{name: "recp3",
 						used: "unused",
 						bgcolor: "red"}]
+		};
+	};
+
+	componentDidMount() {
+		this.setState({
+			// recipes:
+			// 		[{name: "recp1",
+			// 			used: "unused",
+			// 			bgcolor: "red"},
+			// 		{name: "recp2",
+			// 			used: "unused",
+			// 			bgcolor: "red"},
+			// 		{name: "recp3",
+			// 			used: "unused",
+			// 			bgcolor: "red"}]
 		});
 	};
 
@@ -32,30 +42,38 @@ class DragonContainer extends Component {
 		ev.dataTransfer.setData("id", id);
 	};
 
-	onDragOver = (ev) => {
-		// if classname like draggable, update the style
+	onDragOver = (ev, id, drop) => {
 		ev.preventDefault();
-		ev.target.style.background = "purple"
+		ev.dataTransfer.setData("droppable_id", id);
+		if (drop == "drop") {
+			ev.target.style.background = "purple"
+		}
 	};
 
 	onDragLeave = (ev) => {
 		ev.preventDefault();
+		ev.dataTransfer.setData("droppable_id", "");
 		ev.target.style.background = ""
 	};
 
-	onDrop = (ev, cat) => {       
-  let id = ev.dataTransfer.getData("id");
+	onDrop = (ev, cat) => {
+debugger;
+	ev.target.style.background = ""
+  var id = ev.dataTransfer.getData("id");
   let recipes = this.state.recipes.filter((recipe) => {
-      if (recipe.name == id) {
+			if (recipe.used == cat) {
+				recipe.used = "unused"
+			}
+			if (recipe.name == id) {
                recipe.used = cat;
-               recipe.bgcolor = "green"           
-      }              
-       return recipe;       
-   });        
-   this.setState({           
-      ...this.state,           
-      recipes       
-   });    
+      }
+       return recipe;
+   });
+	 // ev.dataTransfer.clearData()
+   this.setState({
+      ...this.state,
+      recipes
+   });
 	}
 
 	render() {
@@ -72,6 +90,11 @@ class DragonContainer extends Component {
 // a meal is a time to eat (3/day)
 // a day is the day of the week
 
+
+	// let recipes = [[],[],[],[],[],[],[],[]]
+
+
+
 		let recipes = {
 			unused: [],
 			sunday: [],
@@ -82,9 +105,9 @@ class DragonContainer extends Component {
 			friday: [],
 			saturday: []
 		}
-		this.state.recipes.forEach ((r) => {
+		this.state.recipes.forEach (r => {
 			recipes[r.used].push(
-				<div 
+				<div
 					key={r.name}
 					onDragStart={(e)=>this.onDragStart(e, r.name)}
 					draggable
@@ -92,46 +115,46 @@ class DragonContainer extends Component {
 					style={{backgroundColor:r.bgcolor}}
 				>
 				{r.name}
-				</div>
-			);
+			</div>
+			)
 		});
 
 
+			let unused_recipes = recipes[Object.keys(recipes)[0]]
+			delete recipes["unused"]
 
 
+
+
+		let thisthing =	Object.keys(recipes).map(recipe =>
+				<div
+					key={recipe}
+					className="droppable meal-container"
+					onDragOver={(e)=>this.onDragOver(e, recipe, "drop")}
+					onDragLeave={(e)=>this.onDragLeave(e)}
+					onDrop={(e)=>this.onDrop(e, recipe)}>
+					{recipe}
+				</div>
+)
 
 		return (
 			<div className="container-drag">
-    		<h2 className="header">Drag a Recipe</h2>
+    		<h2 className="header">TEST</h2>
     				<div className="row">
-							<div className="small-7 medium-7 large-7 columns droppable"
-							onDragOver={(e)=>this.onDragOver(e)}
-							onDragLeave={(e)=>this.onDragLeave(e)}
-							onDrop={(e)=>this.onDrop(e, "sunday")}>
-								<span className="task-header">Sunday</span>
-									{recipes.sunday}                
-							</div>   
 
 
-							<div className="small-7 medium-7 large-7 columns droppable"
-							onDragOver={(e)=>this.onDragOver(e)}
-							onDragLeave={(e)=>this.onDragLeave(e)}
-							onDrop={(e)=>this.onDrop(e, "monday")}>
 
-							<span className="task-header">Monday</span>
-
-							{recipes.monday}                
-							</div> 
+{thisthing}
 
 
 
 
  </div>
 					<div>
-					
+
 					<UnusedContainer
-						recipes={recipes.unused}
-						onDragOver={this.onDragOver}
+						recipes={unused_recipes}
+						onDragOver={(e)=>this.onDragOver(e, "unused")}
 						onDragLeave={this.onDragLeave}
 						onDrop={this.onDrop}
 						/>

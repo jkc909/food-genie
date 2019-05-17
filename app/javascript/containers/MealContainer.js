@@ -1,12 +1,12 @@
 import React from "react";
 
-const UnusedContainer = props => {
+const MealContainer = props => {
 		return (
     <div>
     	<span className="task-header">Unused</span>
     		<div className="unused-container unused"
-						onDragOver={(e)=>props.onDragOver(e)}
-						onDragLeave={(e)=>props.onDragLeave(e)}
+						onDragOver={props.onDragOver}
+						onDragLeave={props.hello}
 						onDrop={(e)=>{props.onDrop(e, "unused")}}>
 					{props.recipes}
 				</div>
@@ -14,4 +14,4 @@ const UnusedContainer = props => {
 		);
 }
 
-export default UnusedContainer
+export default MealContainer
