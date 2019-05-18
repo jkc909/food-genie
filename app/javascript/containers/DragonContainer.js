@@ -1,9 +1,5 @@
 import React, { Component } from "react";
-import RecipeTile from "../tiles/RecipeTile";
-import DayContainer from "./DayContainer"
-import RecipeContainer from "./RecipeContainer"
 import UnusedContainer from "./UnusedContainer"
-import MealContainer from "./MealContainer"
 
 class DragonContainer extends Component {
 	constructor(props) {
@@ -18,6 +14,15 @@ class DragonContainer extends Component {
 						bgcolor: "red"},
 					{name: "recp3",
 						used: "saturday",
+						bgcolor: "red"},
+						{name: "recp4",
+						used: "unused",
+						bgcolor: "red"},
+					{name: "recp5",
+						used: "unused",
+						bgcolor: "red"},
+					{name: "recp6",
+						used: "tuesday",
 						bgcolor: "red"}]
 		};
 	};
@@ -61,23 +66,22 @@ class DragonContainer extends Component {
 	ev.target.style.background = ""
   var id = ev.dataTransfer.getData("id");
   let recipes = this.state.recipes.filter((recipe) => {
-			if (recipe.used == cat) {
-				recipe.used = "unused"
-			}
-			if (recipe.name == id) {
-               recipe.used = cat;
-      }
-       return recipe;
+		if (recipe.used == cat) {
+			recipe.used = "unused"
+		}
+		if (recipe.name == id) {
+	           recipe.used = cat;
+	  }
+	   return recipe;
    });
-	 ev.dataTransfer.clearData()
-   this.setState({
-      ...this.state,
-      recipes
-   });
+	ev.dataTransfer.clearData()
+	this.setState({
+	  ...this.state,
+	  recipes
+	});
 	}
 
 	render() {
-
 		let recipes = {
 			unused: [],
 			sunday: [],
@@ -93,7 +97,6 @@ class DragonContainer extends Component {
 				<div
 					key={r.name}
 					onDragStart={(e)=>this.onDragStart(e, r.name)}
-
 					draggable
 					className="dragon-box draggable"
 					style={{backgroundColor:r.bgcolor}}
@@ -103,12 +106,10 @@ class DragonContainer extends Component {
 			)
 		});
 
+		let unused_recipes = recipes[Object.keys(recipes)[0]]
+		delete recipes["unused"]
 
-			let unused_recipes = recipes[Object.keys(recipes)[0]]
-			delete recipes["unused"]
-
-
-		let thisthing =	Object.keys(recipes).map(recipe =>
+		let used_recipes =	Object.keys(recipes).map(recipe =>
 			<div key={`${recipe}_droppable`}>
 				{recipe}
 				<div
@@ -124,14 +125,10 @@ class DragonContainer extends Component {
 		return (
 			<div className="container-drag">
     		<h2 className="header">DRAG SUMTHIN</h2>
-    			
-
-
-<div className="container">
-{thisthing}
-</div>
-
-					<div >
+				<div className="container">
+					{used_recipes}
+				</div>
+				<div >
 					<UnusedContainer
 						key="unused"
 						recipes={unused_recipes}
@@ -139,8 +136,8 @@ class DragonContainer extends Component {
 						onDragLeave={this.onDragLeave}
 						onDrop={this.onDrop}
 						/>
-					</div>
- </div>
+				</div>
+ 			</div>
 		);
 	}
 }
