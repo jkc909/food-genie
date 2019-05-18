@@ -9,7 +9,6 @@ class DragonContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			// recipes: [] });
 			recipes:
 					[{name: "recp1",
 						used: "unused",
@@ -18,7 +17,7 @@ class DragonContainer extends Component {
 						used: "unused",
 						bgcolor: "red"},
 					{name: "recp3",
-						used: "unused",
+						used: "saturday",
 						bgcolor: "red"}]
 		};
 	};
@@ -42,22 +41,23 @@ class DragonContainer extends Component {
 		ev.dataTransfer.setData("id", id);
 	};
 
-	onDragOver = (ev, id, drop) => {
+	onDragOver = (ev, id) => {
 		ev.preventDefault();
+		if (ev.target.classList[1] != "draggable") {
 		ev.dataTransfer.setData("droppable_id", id);
-		if (drop == "drop") {
 			ev.target.style.background = "purple"
 		}
 	};
 
 	onDragLeave = (ev) => {
 		ev.preventDefault();
-		ev.dataTransfer.setData("droppable_id", "");
-		ev.target.style.background = ""
+		if (ev.target.classList[1] != "draggable") {
+			ev.dataTransfer.setData("droppable_id", "");
+			ev.target.style.background = ""
+		}
 	};
 
 	onDrop = (ev, cat) => {
-debugger;
 	ev.target.style.background = ""
   var id = ev.dataTransfer.getData("id");
   let recipes = this.state.recipes.filter((recipe) => {
@@ -69,7 +69,7 @@ debugger;
       }
        return recipe;
    });
-	 // ev.dataTransfer.clearData()
+	 ev.dataTransfer.clearData()
    this.setState({
       ...this.state,
       recipes
@@ -77,23 +77,6 @@ debugger;
 	}
 
 	render() {
-
-// the plan:
-// dragon container will control all state
-// unused recipes will go into its own container => need to create unused container and populate it with recipe tiles
-// used recipes will be mapped into recipe tiles, but first they should go into day containers... and meal container? yeah. wait, no. how about build the div with three tiles in it? hmmmm
-
-// definitions:
-// ok so dragon container is the top level parent
-// unused container is inside dragon container, it has recipe tiles
-// a recipe contains food data
-// a meal is a time to eat (3/day)
-// a day is the day of the week
-
-
-	// let recipes = [[],[],[],[],[],[],[],[]]
-
-
 
 		let recipes = {
 			unused: [],
@@ -110,6 +93,7 @@ debugger;
 				<div
 					key={r.name}
 					onDragStart={(e)=>this.onDragStart(e, r.name)}
+
 					draggable
 					className="dragon-box draggable"
 					style={{backgroundColor:r.bgcolor}}
@@ -124,35 +108,32 @@ debugger;
 			delete recipes["unused"]
 
 
-
-
 		let thisthing =	Object.keys(recipes).map(recipe =>
+			<div key={`${recipe}_droppable`}>
+				{recipe}
 				<div
-					key={recipe}
 					className="droppable meal-container"
-					onDragOver={(e)=>this.onDragOver(e, recipe, "drop")}
+					onDragOver={(e)=>this.onDragOver(e, recipe)}
 					onDragLeave={(e)=>this.onDragLeave(e)}
 					onDrop={(e)=>this.onDrop(e, recipe)}>
-					{recipe}
+					{recipes[recipe]}
 				</div>
+			</div>
 )
 
 		return (
 			<div className="container-drag">
-    		<h2 className="header">TEST</h2>
-    				<div className="row">
+    		<h2 className="header">DRAG SUMTHIN</h2>
+    			
 
 
-
+<div className="container">
 {thisthing}
+</div>
 
-
-
-
- </div>
-					<div>
-
+					<div >
 					<UnusedContainer
+						key="unused"
 						recipes={unused_recipes}
 						onDragOver={(e)=>this.onDragOver(e, "unused")}
 						onDragLeave={this.onDragLeave}
