@@ -1,24 +1,11 @@
-# README
+# Food Genie
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### What
+Weekly meal planning app, built with Rails and React
 
-Things you may want to cover:
+### Why
+* My spouse and I need a good way to organize our recipes, plan our weekly meals, and track nutrition in one app.
+* Javascript is fun :D
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### Note:
+Still in very early development, more details to come

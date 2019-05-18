@@ -29,16 +29,6 @@ class DragonContainer extends Component {
 
 	componentDidMount() {
 		this.setState({
-			// recipes:
-			// 		[{name: "recp1",
-			// 			used: "unused",
-			// 			bgcolor: "red"},
-			// 		{name: "recp2",
-			// 			used: "unused",
-			// 			bgcolor: "red"},
-			// 		{name: "recp3",
-			// 			used: "unused",
-			// 			bgcolor: "red"}]
 		});
 	};
 
