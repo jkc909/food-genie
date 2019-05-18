@@ -13,16 +13,16 @@ class DragonContainer extends Component {
 						used: "unused",
 						bgcolor: "red"},
 					{name: "recp3",
-						used: "saturday",
+						used: "saturday2",
 						bgcolor: "red"},
-						{name: "recp4",
+					{name: "recp4",
 						used: "unused",
 						bgcolor: "red"},
 					{name: "recp5",
 						used: "unused",
 						bgcolor: "red"},
 					{name: "recp6",
-						used: "tuesday",
+						used: "tuesday3",
 						bgcolor: "red"}]
 		};
 	};
@@ -84,13 +84,31 @@ class DragonContainer extends Component {
 	render() {
 		let recipes = {
 			unused: [],
-			sunday: [],
-			monday: [],
-			tuesday: [],
-			wednesday: [],
-			thursday: [],
-			friday: [],
-			saturday: []
+			sunday1: [],
+			monday1: [],
+			tuesday1: [],
+			wednesday1: [],
+			thursday1: [],
+			friday1: [],
+			saturday1: [],
+			
+			sunday2: [],
+			monday2: [],
+			tuesday2: [],
+			wednesday2: [],
+			thursday2: [],
+			friday2: [],
+			saturday2: [],
+						
+			sunday3: [],
+			monday3: [],
+			tuesday3: [],
+			wednesday3: [],
+			thursday3: [],
+			friday3: [],
+			saturday3: []
+			
+
 		}
 		this.state.recipes.forEach (r => {
 			recipes[r.used].push(
