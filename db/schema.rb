@@ -10,10 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_14_022033) do
+ActiveRecord::Schema.define(version: 2019_05_20_224518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "meals", force: :cascade do |t|
+    t.bigint "week_id", null: false
+    t.bigint "recipe_id"
+    t.integer "meal_type"
+    t.index ["recipe_id"], name: "index_meals_on_recipe_id"
+    t.index ["week_id"], name: "index_meals_on_week_id"
+  end
+
+  create_table "recipes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "title", null: false
+    t.text "description"
+    t.string "image_url"
+    t.float "servings"
+    t.index ["user_id"], name: "index_recipes_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -29,6 +46,8 @@ ActiveRecord::Schema.define(version: 2019_05_14_022033) do
 
   create_table "weeks", force: :cascade do |t|
     t.datetime "week_of"
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_weeks_on_user_id"
   end
 
 end
