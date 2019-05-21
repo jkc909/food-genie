@@ -50,6 +50,23 @@ class DragonContainer extends Component {
 		});
 	};
 
+	fetchRestaurantData(id){
+    fetch(`/api/v1/restaurants/${id}`)
+      .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          let errorMessage = `${response.status} (${response.statusText})`, error = new Error(errorMessage);
+          throw error;
+        }
+      })
+      .then(response => response.json())
+      .then(body => {
+        this.setState({ restaurant: body.restaurant })
+        this.setState({ user: body.user });
+      })
+  }
+
 	onDragStart = (ev, id) => {
 		ev.dataTransfer.setData("id", id);
 	};

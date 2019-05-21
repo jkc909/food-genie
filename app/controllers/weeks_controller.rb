@@ -1,5 +1,5 @@
 class WeeksController < ApplicationController
 	def index
-		@week = Week.first
+		@weeks = Week.first(4)
 	end
 end
