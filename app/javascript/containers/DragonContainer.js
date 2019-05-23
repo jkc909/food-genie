@@ -6,52 +6,17 @@ class DragonContainer extends Component {
 		super(props);
 		this.state = {
 			recipes:
-				[{name: "recp1",
-					used: "unused",
-					bgcolor: "red"},
-				{name: "recp2",
-					used: "unused",
-					bgcolor: "red"},
-				{name: "recp3",
-					used: "saturday2",
-					bgcolor: "red"},
-				{name: "recp4",
-					used: "unused",
-					bgcolor: "red"},
-				{name: "recp5",
-					used: "unused",
-					bgcolor: "red"},
-				{name: "recp6",
-					used: "wednesday1",
-					bgcolor: "red"},
-				{name: "recp7",
-					used: "unused",
-					bgcolor: "red"},
-				{name: "recp8",
-					used: "unused",
-					bgcolor: "red"},
-				{name: "recp9",
-					used: "monday3",
-					bgcolor: "red"},
-				{name: "recp10",
-					used: "unused",
-					bgcolor: "red"},
-				{name: "recp11",
-					used: "unused",
-					bgcolor: "red"},
-				{name: "recp12",
-					used: "tuesday3",
-					bgcolor: "red"}]
+				[]
 		};
 	};
 
 	componentDidMount() {
-		this.setState({
-		});
+		let id = this.props.params.id
+		this.fetchRecipeData(id)
 	};
 
-	fetchRestaurantData(id){
-    fetch(`/api/v1/restaurants/${id}`)
+	fetchRecipeData(id){
+    fetch(`/api/v1/weeks/${id}`)
       .then(response => {
         if (response.ok) {
           return response;
@@ -62,7 +27,7 @@ class DragonContainer extends Component {
       })
       .then(response => response.json())
       .then(body => {
-        this.setState({ restaurant: body.restaurant })
+        this.setState({ recipes: body.payload })
         this.setState({ user: body.user });
       })
   }
