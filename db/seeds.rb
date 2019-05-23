@@ -20,7 +20,7 @@ p "create Weeks"
 
 
 p "create Recipes"
-	Recipe.create!(title: "Unassigned", user: user, servings: 2)
+	Recipe.create!(title: "Unused", user: user, servings: 2)
 	recipes = ["Cheeseburgers", "Chicken and rice", "Tuna", "Breakfast Sandwich", "NOTHING", "Pizza", "Salad"]
 	recipes.each do |recipe|
 		Recipe.create!(title: recipe, user: user, servings: 2)
