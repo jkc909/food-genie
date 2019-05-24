@@ -2,15 +2,13 @@ class WeekSerializer < ActiveModel::Serializer
   attributes :id, :week_of, :payload
   def payload
 		recipes = []
-		object.meals.find_each do |meal|
-			recipes << [{name: meal.recipe[:title], 
-					used: meal.meal_type,bgcolor: "red"}]
-		end
 
-  	binding.pry
-		object.recipes.each do |recipe|
-			recipes << [{name: recipe.title, used: "Unused", bgcolor: "blue"}]
+		object.meals.each do |meal|
+			rec_name = meal.recipe[:title]
+
+			recipes << [{name: rec_name, 
+					used: meal.meal_types[:name],bgcolor: "red"}]
 		end
-  	return recipes
+  	return recipes.uniq.flatten
 	end
 end

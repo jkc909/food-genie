@@ -4,6 +4,7 @@ class Api::V1::WeeksController < ApplicationController
     def show
       week = Week.find(params[:id])
       user = current_user
+      recipes = Recipe.first
       render json: week
     end
 end

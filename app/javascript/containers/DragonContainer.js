@@ -101,6 +101,7 @@ class DragonContainer extends Component {
 			friday3: [],
 			saturday3: []
 		}
+
 		this.state.recipes.forEach (r => {
 			recipes[r.used].push(
 				<div

@@ -28,13 +28,52 @@ p "create Recipes"
 
 
 
+
+
+
+
+p "create meal types"
+
+			meal_types= [
+			["unused"],
+			["sunday1"],
+			["monday1"],
+			["tuesday1"],
+			["wednesday1"],
+			["thursday1"],
+			["friday1"],
+			["saturday1"],
+			["sunday2"],
+			["monday2"],
+			["tuesday2"],
+			["wednesday2"],
+			["thursday2"],
+			["friday2"],
+			["saturday2"],	
+			["sunday3"],
+			["monday3"],
+			["tuesday3"],
+			["wednesday3"],
+			["thursday3"],
+			["friday3"],
+			["saturday3"]].flatten
+
+			meal_types.each do |meal|
+				MealTypes.create!(name: meal)
+			end
+
+
 p "create Meals"
 	all_weeks = Week.all
 
 	all_weeks.each do |week|
 		i = 1
 		until i == 22
-			Meal.create!(meal_type: i, week_id: week.id, recipe_id: 1)
+				Meal.create!(week_id: week.id, recipe_id: 1+rand(8), meal_types_id: 1) 
 			i += 1
 		end
 	end
+
+
+
+		
