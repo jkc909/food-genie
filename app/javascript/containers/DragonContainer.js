@@ -6,31 +6,31 @@ class DragonContainer extends Component {
 		super(props);
 		this.state = {
 			recipes:
-					[{name: "recp1",
-						used: "unused",
-						bgcolor: "red"},
-					{name: "recp2",
-						used: "unused",
-						bgcolor: "red"},
-					{name: "recp3",
-						used: "saturday2",
-						bgcolor: "red"},
-					{name: "recp4",
-						used: "unused",
-						bgcolor: "red"},
-					{name: "recp5",
-						used: "unused",
-						bgcolor: "red"},
-					{name: "recp6",
-						used: "tuesday3",
-						bgcolor: "red"}]
+				[]
 		};
 	};
 
 	componentDidMount() {
-		this.setState({
-		});
+		let id = this.props.params.id
+		this.fetchRecipeData(id)
 	};
+
+	fetchRecipeData(id){
+    fetch(`/api/v1/weeks/${id}`)
+      .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          let errorMessage = `${response.status} (${response.statusText})`, error = new Error(errorMessage);
+          throw error;
+        }
+      })
+      .then(response => response.json())
+      .then(body => {
+        this.setState({ recipes: body.payload })
+        this.setState({ user: body.user });
+      })
+  }
 
 	onDragStart = (ev, id) => {
 		ev.dataTransfer.setData("id", id);
@@ -53,27 +53,30 @@ class DragonContainer extends Component {
 	};
 
 	onDrop = (ev, cat) => {
-	ev.target.style.background = ""
-  var id = ev.dataTransfer.getData("id");
-  let recipes = this.state.recipes.filter((recipe) => {
-		if (recipe.used == cat) {
-			recipe.used = "unused"
-		}
-		if (recipe.name == id) {
-	           recipe.used = cat;
-	  }
-	   return recipe;
-   });
-	ev.dataTransfer.clearData()
-	this.setState({
-	  ...this.state,
-	  recipes
-	});
-	}
+		let id = ev.dataTransfer.getData("id");
+		if (ev.target.classList[1] != "draggable") {
+			ev.target.style.background = ""
+		};
+	  let recipes = this.state.recipes.filter((recipe) => {
+			if (recipe.used == cat) {
+				recipe.used = "unused"
+			};
+			if (recipe.name == id) {
+		           recipe.used = cat;
+		  };
+		   return recipe;
+	  });
+		ev.dataTransfer.clearData()
+		this.setState({
+		  ...this.state,
+		  recipes
+		});
+	};
 
 	render() {
 		let recipes = {
 			unused: [],
+
 			sunday1: [],
 			monday1: [],
 			tuesday1: [],
@@ -97,9 +100,8 @@ class DragonContainer extends Component {
 			thursday3: [],
 			friday3: [],
 			saturday3: []
-			
-
 		}
+
 		this.state.recipes.forEach (r => {
 			recipes[r.used].push(
 				<div
@@ -132,7 +134,7 @@ class DragonContainer extends Component {
 
 		return (
 			<div className="container-drag">
-    		<h2 className="header">DRAG SUMTHIN</h2>
+    		<h2 className="header" style={{backgroundColor:"blue"}}>DRAG SUMTHIN</h2>
 				<div className="container">
 					{used_recipes}
 				</div>

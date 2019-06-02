@@ -18,6 +18,12 @@
 //= require_tree .
 
 $(function(){ $(document).foundation(); });
+
 $(function() {
-  $( "#datepicker" ).datepicker();
+  $( "#datepicker" ).datepicker({
+  	showWeek: true,
+  	changeMonth: true,
+    changeYear: true,
+    dateFormat: "@"
+  });
 } );
