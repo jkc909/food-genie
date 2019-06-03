@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   namespace :api do 
   	namespace :v1 do
-  		resources :weeks, only: [:show, :edit]
+  		resources :weeks, only: [:show, :edit, :update]
   	end
   end
 end
