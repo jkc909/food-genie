@@ -44,8 +44,6 @@ end
 
 gem 'rb-readline'
 
-gem 'jquery-ui-rails'
-
 gem 'active_model_serializers'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
