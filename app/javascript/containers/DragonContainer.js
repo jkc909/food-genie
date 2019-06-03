@@ -28,12 +28,41 @@ class DragonContainer extends Component {
       .then(response => response.json())
       .then(body => {
         this.setState({ recipes: body.payload })
-        this.setState({ user: body.user });
+        // this.setState({ user: body.user });
       })
-  }
+	}
+	
+	updateWeek(recipes) {
+		fetch(`/api/v1/weeks/${this.props.params.id}`, {
+			method: 'PATCH',
+			body: JSON.stringify({recipes: recipes}),
+			credentials: 'same-origin',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}
+		})
+		.then(response => {
+			if (response.ok) {
+				return response
+			} else {
+				let errorMessage = `${response.status} (${response.statusText})`, error = new Error(errorMessage)
+				throw(error)
+			}
+		})
+		.then(response => response.json())
+		.then(body => {
+			
+		})
+		.catch(error => {
+			console.error(`Error in fetch: ${error.message}`),
+			alert("Error while updating Week")
+		})
+	}
 
-	onDragStart = (ev, id) => {
+	onDragStart = (ev, title, id) => {
 		ev.dataTransfer.setData("id", id);
+		ev.dataTransfer.setData("title", title)
 	};
 
 	onDragOver = (ev, id) => {
@@ -54,6 +83,7 @@ class DragonContainer extends Component {
 
 	onDrop = (ev, cat) => {
 		let id = ev.dataTransfer.getData("id");
+		let title = ev.dataTransfer.getData("title");
 		if (ev.target.classList[1] != "draggable") {
 			ev.target.style.background = ""
 		};
@@ -61,7 +91,7 @@ class DragonContainer extends Component {
 			if (recipe.used == cat) {
 				recipe.used = "unused"
 			};
-			if (recipe.name == id) {
+			if (recipe.name == title && recipe.meal_id == id ) {
 		           recipe.used = cat;
 		  };
 		   return recipe;
@@ -71,6 +101,7 @@ class DragonContainer extends Component {
 		  ...this.state,
 		  recipes
 		});
+		this.updateWeek(recipes)
 	};
 
 	render() {
@@ -102,11 +133,13 @@ class DragonContainer extends Component {
 			saturday3: []
 		}
 
+		let unused_id = 1
 		this.state.recipes.forEach (r => {
+
 			recipes[r.used].push(
 				<div
-					key={r.name}
-					onDragStart={(e)=>this.onDragStart(e, r.name)}
+					key={`${r.meal_id}_${r.recipe_id}`}
+					onDragStart={(e)=>this.onDragStart(e, r.name, r.meal_id)}
 					draggable
 					className="dragon-box draggable"
 					style={{backgroundColor:r.bgcolor}}
@@ -142,7 +175,7 @@ class DragonContainer extends Component {
 					<UnusedContainer
 						key="unused"
 						recipes={unused_recipes}
-						onDragOver={(e)=>this.onDragOver(e, "unused")}
+						onDragOver={(e)=>this.onDragOver(e, "unused", 1)}
 						onDragLeave={this.onDragLeave}
 						onDrop={this.onDrop}
 						/>
