@@ -1,7 +1,6 @@
 
 import React from 'react'
 import { render } from 'react-dom'
-//= require jquery-ui
 
 import App from '../react/components/app'
 import RedBox from 'redbox-react'

@@ -12,18 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
 //= require foundation
 //= require activestorage
 //= require_tree .
 
 $(function(){ $(document).foundation(); });
-
-$(function() {
-  $( "#datepicker" ).datepicker({
-  	showWeek: true,
-  	changeMonth: true,
-    changeYear: true,
-    dateFormat: "@"
-  });
-} );
