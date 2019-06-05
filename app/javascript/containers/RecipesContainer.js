@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import RecipeViewTile from "../tiles/RecipeViewTile";
-import RecipeListTile from "../tiles/RecipeListTile";
+import RecipeListTile from "../tiles/RecipeListTile"
 
 class RecipesContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			used_recipes: [],
-			user_recipes: []
+			user_recipes: [],
+			week_of: ""
 		};
 	};
 
@@ -30,7 +31,8 @@ class RecipesContainer extends Component {
       .then(body => {
         this.setState({ 
 					used_recipes: body.used_recipes,
-					user_recipes: body.user_recipes })
+					user_recipes: body.user_recipes,
+					week_of: body.week_of })
       })
 	}
 	
@@ -61,6 +63,50 @@ class RecipesContainer extends Component {
 			alert("Error while updating Week")
 		})
 	}
+
+	onDragStart = (ev, title, id) => {
+		ev.dataTransfer.setData("id", id);
+		ev.dataTransfer.setData("title", title)
+	};
+
+	onDragOver = (ev, id) => {
+		ev.preventDefault();
+		if (ev.target.classList[1] != "draggable") {
+		ev.dataTransfer.setData("droppable_id", id);
+			ev.target.style.background = "purple"
+		}
+	};
+
+	onDragLeave = (ev) => {
+		ev.preventDefault();
+		if (ev.target.classList[1] != "draggable") {
+			ev.dataTransfer.setData("droppable_id", "");
+			ev.target.style.background = ""
+		}
+	};
+
+	onDrop = (ev, cat) => {
+		let id = ev.dataTransfer.getData("id");
+		let title = ev.dataTransfer.getData("title");
+		if (ev.target.classList[1] != "draggable") {
+			ev.target.style.background = ""
+		};
+	  let recipes = this.state.recipes.filter((recipe) => {
+			if (recipe.used == cat) {
+				recipe.used = "unused"
+			};
+			if (recipe.name == title && recipe.meal_id == id ) {
+		           recipe.used = cat;
+		  };
+		   return recipe;
+	  });
+		ev.dataTransfer.clearData()
+		this.setState({
+		  ...this.state,
+		  recipes
+		});
+		this.updateWeek(recipes)
+	};
 
 	render() {
 		// sort alphabetically
@@ -102,12 +148,18 @@ class RecipesContainer extends Component {
 
 		return (
 			<div className="container-drag">
-    		<h2 className="header" style={{backgroundColor:"blue"}}>ALL DA RECIPES</h2>
-				<div>
-				{used_recipe_tiles}
-				</div>
-				<div>
-				{user_recipe_tiles}
+    		<h2 className="header" style={{backgroundColor:"blue"}}>Recipes for week of {this.state.week_of}</h2>
+				<div className="used-user-recipe-container">
+
+					<div>
+					{user_recipe_tiles}
+					</div>
+				
+					<div className="user-recipe-container">
+					{used_recipe_tiles}
+					</div>
+
+
 				</div>
  			</div>
 		);

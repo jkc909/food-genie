@@ -21,7 +21,20 @@
 	grid-gap: 10px;
 	grid-template-rows: auto;
 }
- */
+
+.used-user-recipe-container {
+	display: grid;
+	grid-template-columns: 33% 66%;
+	grid-gap: 10px;
+	grid-template-rows: auto;
+}
+
+.user-recipe-container {
+	display: grid;
+	grid-template-columns: 50% 50%;
+	grid-gap: 10px;
+	grid-template-rows: auto;
+}
 
 
  .center {
