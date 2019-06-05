@@ -3,8 +3,8 @@ class Api::V1::RecipesController < ApplicationController
 
     def index
         user = current_user
-        recipes = Week.find(params[:week_id]).recipes
-        render json: recipes
+        week = Week.find(params[:week_id])
+        render json: week, serializer: CompleteWeekSerializer
     end
 
     private

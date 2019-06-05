@@ -1,6 +1,6 @@
 import React from "react";
 
-const UnusedContainer = props => {
+const UnusedTile = props => {
 		return (
     <div>
     	<span className="task-header">Unused</span>
@@ -14,4 +14,4 @@ const UnusedContainer = props => {
 		);
 }
 
-export default UnusedContainer
+export default UnusedTile

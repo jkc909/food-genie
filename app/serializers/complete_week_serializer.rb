@@ -1,6 +1,7 @@
-class WeekSerializer < ActiveModel::Serializer
-  attributes :id, :week_of, :payload
-  def payload
+class CompleteWeekSerializer < ActiveModel::Serializer
+  attributes :id, :week_of, :used_recipes, :user_recipes
+	def used_recipes
+		user = current_user
 		recipes = []
 		object.meals.find_each do |meal|
 			name = meal.recipe[:title]
@@ -15,5 +16,9 @@ class WeekSerializer < ActiveModel::Serializer
 						meal_id: meal_id}]
 		end
 	  return recipes.uniq.flatten
-	end
+  end
+
+  def user_recipes
+    current_user.recipes if current_user else User.first.recipes
+  end
 end

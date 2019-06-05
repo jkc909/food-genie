@@ -1,6 +1,8 @@
 class RecipeSerializer < ActiveModel::Serializer
-  def attributes(*args)
-    object.attributes.symbolize_keys
+  attributes :user_recipes
+
+  def user_recipes
+    current_user.recipes
   end
 
 end
