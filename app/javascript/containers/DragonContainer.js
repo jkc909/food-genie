@@ -27,8 +27,9 @@ class DragonContainer extends Component {
       })
       .then(response => response.json())
       .then(body => {
-        this.setState({ recipes: body.payload })
-        // this.setState({ user: body.user });
+        this.setState({ 
+					recipes: body.payload,
+					week_of: body.week_of })
       })
 	}
 	

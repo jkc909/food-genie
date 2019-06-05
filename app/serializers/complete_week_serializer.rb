@@ -1,7 +1,7 @@
 class CompleteWeekSerializer < ActiveModel::Serializer
-  attributes :id, :week_of, :used_recipes, :user_recipes
+	attributes :id, :week_of, :used_recipes, :user_recipes
+	
 	def used_recipes
-		user = current_user
 		recipes = []
 		object.meals.find_each do |meal|
 			name = meal.recipe[:title]
@@ -18,7 +18,16 @@ class CompleteWeekSerializer < ActiveModel::Serializer
 	  return recipes.uniq.flatten
   end
 
-  def user_recipes
-    current_user.recipes if current_user else User.first.recipes
-  end
+	def user_recipes
+		recipes = []
+		object.recipes.find_each do |recipe|
+			name = recipe[:title]
+			recipe_id = recipe[:id]
+
+			recipes << [{name: name, 
+						bgcolor: "red", 
+						recipe_id: recipe_id}]
+		end
+	  return recipes.uniq.flatten
+	end
 end

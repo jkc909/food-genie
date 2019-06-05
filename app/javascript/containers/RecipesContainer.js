@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import RecipeViewTile from "../tiles/RecipeViewTile";
+import RecipeListTile from "../tiles/RecipeListTile";
 
 class RecipesContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			used_recipes:
-				[]
+			used_recipes: [],
+			user_recipes: []
 		};
 	};
 
@@ -63,13 +64,33 @@ class RecipesContainer extends Component {
 
 	render() {
 		// sort alphabetically
+		let user_recipes = this.state.user_recipes
+		user_recipes.sort( function( a, b ) {
+			a = a.name.toLowerCase();
+			b = b.name.toLowerCase();	
+			return a < b ? -1 : a > b ? 1 : 0;
+	});
+
+	let recipe_id = 0
+	let user_recipe_tiles = user_recipes.map(recipe => {
+		return(
+			<RecipeListTile 
+				key={`${(recipe_id+=1)}${recipe.recipe_id}`}
+				recipe={recipe}
+			/>
+		)
+	})
+
+
+
+
 		let used_recipes = this.state.used_recipes
 		used_recipes.sort( function( a, b ) {
 			a = a.name.toLowerCase();
 			b = b.name.toLowerCase();	
 			return a < b ? -1 : a > b ? 1 : 0;
 	});
-		let recipe_id = 0
+		recipe_id = 0
 		let used_recipe_tiles = used_recipes.map(recipe => {
 			return(
 				<RecipeViewTile 
@@ -84,6 +105,9 @@ class RecipesContainer extends Component {
     		<h2 className="header" style={{backgroundColor:"blue"}}>ALL DA RECIPES</h2>
 				<div>
 				{used_recipe_tiles}
+				</div>
+				<div>
+				{user_recipe_tiles}
 				</div>
  			</div>
 		);
