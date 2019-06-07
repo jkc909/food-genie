@@ -68,19 +68,17 @@ class RecipesContainer extends Component {
 		ev.dataTransfer.setData("id", id);
 		ev.dataTransfer.setData("title", title)
 	};
-
+	
 	onDragOver = (ev, id) => {
 		ev.preventDefault();
-		if (ev.target.classList[1] != "draggable") {
-		ev.dataTransfer.setData("droppable_id", id);
+		if (ev.target.classList[0] === "used-user-recipe-container") {
 			ev.target.style.background = "purple"
 		}
 	};
 
 	onDragLeave = (ev) => {
 		ev.preventDefault();
-		if (ev.target.classList[1] != "draggable") {
-			ev.dataTransfer.setData("droppable_id", "");
+		if (ev.target.classList[0] === "used-user-recipe-container") {
 			ev.target.style.background = ""
 		}
 	};
@@ -88,10 +86,10 @@ class RecipesContainer extends Component {
 	onDrop = (ev, cat) => {
 		let id = ev.dataTransfer.getData("id");
 		let title = ev.dataTransfer.getData("title");
-		if (ev.target.classList[1] != "draggable") {
+		if (ev.target.classList[0] === "used-user-recipe-container") {
 			ev.target.style.background = ""
 		};
-	  let recipes = this.state.recipes.filter((recipe) => {
+	  let recipes = this.state.used_recipes.filter((recipe) => {
 			if (recipe.used == cat) {
 				recipe.used = "unused"
 			};
@@ -118,12 +116,17 @@ class RecipesContainer extends Component {
 	});
 
 	let recipe_id = 0
-	let user_recipe_tiles = user_recipes.map(recipe => {
+	let user_recipe_tiles = user_recipes.map(r => {
 		return(
-			<RecipeListTile 
-				key={`${(recipe_id+=1)}${recipe.recipe_id}`}
-				recipe={recipe}
-			/>
+			<div 
+				key={`${(recipe_id+=1)}${r.recipe_id}`}
+				onDragStart={(e)=>this.onDragStart(e, r)}
+				draggable
+				style={{backgroundColor:"green", height:"300px"}}>
+					<RecipeListTile 
+						recipe={r}
+					/>
+			</div>
 		)
 	})
 
@@ -137,29 +140,31 @@ class RecipesContainer extends Component {
 			return a < b ? -1 : a > b ? 1 : 0;
 	});
 		recipe_id = 0
-		let used_recipe_tiles = used_recipes.map(recipe => {
+		let used_recipe_tiles = used_recipes.map(r => {
 			return(
-				<RecipeViewTile 
-					key={`${(recipe_id+=1)}${recipe.recipe_id}`}
-					recipe={recipe}
-				/>
+					<RecipeViewTile 
+						key={`${(recipe_id+=1)}${r.recipe_id}`}
+						recipe={r}
+					/>
 			)
 		})
 
 		return (
 			<div className="container-drag">
     		<h2 className="header" style={{backgroundColor:"blue"}}>Recipes for week of {this.state.week_of}</h2>
-				<div className="used-user-recipe-container">
-
-					<div>
-					{user_recipe_tiles}
-					</div>
-				
 					<div className="user-recipe-container">
-					{used_recipe_tiles}
+					<div>
+						{user_recipe_tiles}
 					</div>
-
-
+					<div					
+						className="used-user-recipe-container"
+						onDragOver={(e)=>this.onDragOver(e)}
+						onDragLeave={this.onDragLeave}
+						onDrop={this.onDrop}
+						style={{backgroundColor:"blue", height:"600px", width:"900px"}}
+					>
+						{used_recipe_tiles}
+					</div>
 				</div>
  			</div>
 		);
