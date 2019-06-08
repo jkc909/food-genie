@@ -2,9 +2,7 @@ class Api::V1::WeeksController < ApplicationController
     protect_from_forgery unless: -> { request.format.json? }
 
     def show
-      week = Week.find(params[:id])
-      user = current_user
-      render json: week
+      render json: Week.find(params[:id]), serializer: SimpleWeekSerializer
     end
 
     def update

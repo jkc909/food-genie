@@ -1,6 +1,7 @@
-class WeekSerializer < ActiveModel::Serializer
+class SimpleWeekSerializer < ActiveModel::Serializer
   attributes :id, :week_of, :payload
-  def payload
+	def payload
+		user = current_user
 		recipes = []
 		object.meals.find_each do |meal|
 			name = meal.recipe[:title]

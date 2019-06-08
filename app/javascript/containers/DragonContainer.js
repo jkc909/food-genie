@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import UnusedContainer from "./UnusedContainer"
+import UnusedTile from "../tiles/UnusedTile"
 
 class DragonContainer extends Component {
 	constructor(props) {
@@ -27,8 +27,9 @@ class DragonContainer extends Component {
       })
       .then(response => response.json())
       .then(body => {
-        this.setState({ recipes: body.payload })
-        // this.setState({ user: body.user });
+        this.setState({ 
+					recipes: body.payload,
+					week_of: body.week_of })
       })
 	}
 	
@@ -133,7 +134,7 @@ class DragonContainer extends Component {
 			saturday3: []
 		}
 
-		let unused_id = 1
+
 		this.state.recipes.forEach (r => {
 
 			recipes[r.used].push(
@@ -172,7 +173,7 @@ class DragonContainer extends Component {
 					{used_recipes}
 				</div>
 				<div >
-					<UnusedContainer
+					<UnusedTile
 						key="unused"
 						recipes={unused_recipes}
 						onDragOver={(e)=>this.onDragOver(e, "unused", 1)}

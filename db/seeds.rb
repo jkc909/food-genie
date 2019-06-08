@@ -18,12 +18,30 @@ p "create Weeks"
 		weeks += 1
 	end
 
+p "create prep categories"
+	prep_cats = ["No prep", "Sunday Meal Prep", "Day-of"]
+	prep_cats.each do |cat|
+		PrepCategory.create!(name: cat)
+	end
+	
 
 p "create Recipes"
-	Recipe.create!(title: "Unused", user: user, servings: 2)
+	Recipe.create!(title: "Unused", 
+					user: user, 
+					servings: 2,
+					calories_per_serving: 0,
+					prep_category_id: 1,
+					cook_time: nil,
+					price_per_serving: nil)
 	recipes = ["Cheeseburgers", "Chicken and rice", "Tuna", "Breakfast Sandwich", "NOTHING", "Pizza", "Salad"]
 	recipes.each do |recipe|
-		Recipe.create!(title: recipe, user: user, servings: 2)
+		Recipe.create!(title: recipe, 
+						user: user, 
+						servings: 2, 
+						calories_per_serving: rand(500..1000), 
+						prep_category_id: rand(2..3),
+						cook_time: "00:45",
+						price_per_serving: rand(7..12))
 	end
 
 
