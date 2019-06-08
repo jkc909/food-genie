@@ -12,8 +12,11 @@ Rails.application.routes.draw do
   namespace :api do 
   	namespace :v1 do
       resources :weeks, only: [:show, :edit, :update]
+      resources :recipes, only: [:index, :show, :edit, :update]
       resources :weeks do
-        resources :recipes, only: [:index, :show, :edit, :update]
+        resources :recipes, only: [:index, :show, :edit, :update] do 
+          resources :meals, only: [:create, :destroy]
+        end
       end
   	end
   end

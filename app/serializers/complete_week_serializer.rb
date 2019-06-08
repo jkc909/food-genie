@@ -20,7 +20,7 @@ class CompleteWeekSerializer < ActiveModel::Serializer
 
 	def user_recipes
 		recipes = []
-		object.recipes.find_each do |recipe|
+		User.first.recipes.find_each do |recipe|
 			name = recipe[:title]
 			recipe_id = recipe[:id]
 

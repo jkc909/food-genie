@@ -134,7 +134,7 @@ class DragonContainer extends Component {
 			saturday3: []
 		}
 
-		let unused_id = 1
+
 		this.state.recipes.forEach (r => {
 
 			recipes[r.used].push(

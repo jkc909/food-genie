@@ -2,6 +2,9 @@
   "name": "food-genie",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@fortawesome/free-solid-svg-icons": "^5.9.0",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "@rails/webpacker": "3.5",
     "babel-preset-react": "~6.24.1",
     "prop-types": "~15.6.0",
@@ -28,9 +31,9 @@
     "karma-webpack": "2.0.1",
     "phantomjs-prebuilt": "~2.1.14",
     "react-addons-test-utils": "~15.6.2",
+    "tar": ">=4.4.2",
     "webpack-cli": "^2.0.10",
-    "webpack-dev-server": "^2.11.1",
-    "tar": ">=4.4.2"
+    "webpack-dev-server": "^2.11.1"
   },
   "scripts": {
     "start": "./bin/webpack-dev-server",

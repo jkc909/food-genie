@@ -8,8 +8,10 @@ class RecipesContainer extends Component {
 		this.state = {
 			used_recipes: [],
 			user_recipes: [],
-			week_of: ""
+			week_of: "",
+			week_id: ""
 		};
+		this.handleClickAddRecipe = this.handleClickAddRecipe.bind(this)
 	};
 
 	componentDidMount() {
@@ -32,14 +34,14 @@ class RecipesContainer extends Component {
         this.setState({ 
 					used_recipes: body.used_recipes,
 					user_recipes: body.user_recipes,
-					week_of: body.week_of })
+					week_of: body.week_of,
+					week_id: body.id })
       })
 	}
 	
-	updateRecipe(recipe) {
-		fetch(`/api/v1/recipes/${recipe.id}`, {
-			method: 'PATCH',
-			body: JSON.stringify({recipes: recipes}),
+	postMeal(week_id, recipe_id) {
+		fetch(`/api/v1/weeks/${week_id}/recipes/${recipe_id}/meals`, {
+			method: 'POST',
 			credentials: 'same-origin',
 			headers: {
 				'Accept': 'application/json',
@@ -56,7 +58,12 @@ class RecipesContainer extends Component {
 		})
 		.then(response => response.json())
 		.then(body => {
-			
+			this.setState ({
+				used_recipes: body.used_recipes,
+				user_recipes: body.user_recipes,
+				week_of: body.week_of,
+				week_id: body.id
+			})
 		})
 		.catch(error => {
 			console.error(`Error in fetch: ${error.message}`),
@@ -64,47 +71,9 @@ class RecipesContainer extends Component {
 		})
 	}
 
-	onDragStart = (ev, title, id) => {
-		ev.dataTransfer.setData("id", id);
-		ev.dataTransfer.setData("title", title)
-	};
-	
-	onDragOver = (ev, id) => {
-		ev.preventDefault();
-		if (ev.target.classList[0] === "used-user-recipe-container") {
-			ev.target.style.background = "purple"
-		}
-	};
-
-	onDragLeave = (ev) => {
-		ev.preventDefault();
-		if (ev.target.classList[0] === "used-user-recipe-container") {
-			ev.target.style.background = ""
-		}
-	};
-
-	onDrop = (ev, cat) => {
-		let id = ev.dataTransfer.getData("id");
-		let title = ev.dataTransfer.getData("title");
-		if (ev.target.classList[0] === "used-user-recipe-container") {
-			ev.target.style.background = ""
-		};
-	  let recipes = this.state.used_recipes.filter((recipe) => {
-			if (recipe.used == cat) {
-				recipe.used = "unused"
-			};
-			if (recipe.name == title && recipe.meal_id == id ) {
-		           recipe.used = cat;
-		  };
-		   return recipe;
-	  });
-		ev.dataTransfer.clearData()
-		this.setState({
-		  ...this.state,
-		  recipes
-		});
-		this.updateWeek(recipes)
-	};
+	handleClickAddRecipe(ev) {
+		this.postMeal(this.state.week_id, ev.target.id)
+	}
 
 	render() {
 		// sort alphabetically
@@ -120,18 +89,15 @@ class RecipesContainer extends Component {
 		return(
 			<div 
 				key={`${(recipe_id+=1)}${r.recipe_id}`}
-				onDragStart={(e)=>this.onDragStart(e, r)}
-				draggable
-				style={{backgroundColor:"green", height:"300px"}}>
+				style={{backgroundColor:"green", height:"50px"}}
+				>
 					<RecipeListTile 
 						recipe={r}
+						handleClickAddRecipe={this.handleClickAddRecipe}
 					/>
 			</div>
 		)
 	})
-
-
-
 
 		let used_recipes = this.state.used_recipes
 		used_recipes.sort( function( a, b ) {
@@ -158,9 +124,6 @@ class RecipesContainer extends Component {
 					</div>
 					<div					
 						className="used-user-recipe-container"
-						onDragOver={(e)=>this.onDragOver(e)}
-						onDragLeave={this.onDragLeave}
-						onDrop={this.onDrop}
 						style={{backgroundColor:"blue", height:"600px", width:"900px"}}
 					>
 						{used_recipe_tiles}

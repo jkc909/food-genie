@@ -1,8 +1,9 @@
 class RecipeSerializer < ActiveModel::Serializer
-  attributes :user_recipes
+  attributes :id, :title, :used_recipe
 
-  def user_recipes
-    current_user.recipes
+  def used_recipe
+    recipe_id = object.id
+    name = object.title
   end
 
 end
