@@ -24,6 +24,8 @@
 /public/assets
 .byebug_history
 
+/recipe_scraper/dev_subjects
+
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 .env
