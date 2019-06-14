@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_04_002813) do
+ActiveRecord::Schema.define(version: 2019_06_09_033506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ingredients", force: :cascade do |t|
+    t.string "name"
+    t.string "image_url"
+    t.string "unit"
+  end
 
   create_table "meal_types", force: :cascade do |t|
     t.string "name", null: false
@@ -38,18 +44,36 @@ ActiveRecord::Schema.define(version: 2019_06_04_002813) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "recipe_ingredients", force: :cascade do |t|
+    t.bigint "recipe_id"
+    t.bigint "ingredients_id"
+    t.decimal "amount"
+    t.index ["ingredients_id"], name: "index_recipe_ingredients_on_ingredients_id"
+    t.index ["recipe_id"], name: "index_recipe_ingredients_on_recipe_id"
+  end
+
+  create_table "recipe_nutrition_values", force: :cascade do |t|
+    t.bigint "recipe_id"
+    t.integer "energy"
+    t.integer "calories"
+    t.integer "fat"
+    t.integer "carbs"
+    t.integer "protein"
+    t.index ["recipe_id"], name: "index_recipe_nutrition_values_on_recipe_id"
+  end
+
   create_table "recipes", force: :cascade do |t|
     t.bigint "user_id", null: false
+    t.bigint "prep_category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "title", null: false
     t.text "description"
     t.string "image_url"
     t.float "servings"
     t.integer "calories_per_serving"
     t.time "cook_time"
-    t.bigint "prep_category_id"
     t.decimal "price_per_serving", precision: 8, scale: 2
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["prep_category_id"], name: "index_recipes_on_prep_category_id"
     t.index ["user_id"], name: "index_recipes_on_user_id"
   end
