@@ -46,9 +46,10 @@ ActiveRecord::Schema.define(version: 2019_06_09_033506) do
 
   create_table "recipe_ingredients", force: :cascade do |t|
     t.bigint "recipe_id"
-    t.bigint "ingredients_id"
+    t.bigint "ingredient_id"
     t.decimal "amount"
-    t.index ["ingredients_id"], name: "index_recipe_ingredients_on_ingredients_id"
+    t.boolean "not_included"
+    t.index ["ingredient_id"], name: "index_recipe_ingredients_on_ingredient_id"
     t.index ["recipe_id"], name: "index_recipe_ingredients_on_recipe_id"
   end
 
@@ -71,7 +72,6 @@ ActiveRecord::Schema.define(version: 2019_06_09_033506) do
     t.text "description"
     t.string "image_url"
     t.float "servings"
-    t.integer "calories_per_serving"
     t.time "cook_time"
     t.decimal "price_per_serving", precision: 8, scale: 2
     t.index ["prep_category_id"], name: "index_recipes_on_prep_category_id"

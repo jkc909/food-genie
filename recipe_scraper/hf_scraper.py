@@ -46,7 +46,7 @@ class ScraperHf:
                 amount = amount.replace(replace, str(unicodedata.numeric(replace)))
             except:
                 pass
-            ingredient_payload += [{"name": name, "amount": amount}]
+            ingredient_payload += [{"name": name, "amount": amount, "not_included": "0"}]
         return ingredient_payload
 
     def get_ingredients_not_included(self, html):
@@ -60,7 +60,7 @@ class ScraperHf:
                 amount = amount.replace(replace, str(unicodedata.numeric(replace)))
             except:
                 pass
-            ingredient_payload += [{"name": name, "amount": amount}]
+            ingredient_payload += [{"name": name, "amount": amount, "not_included": "1"}]
         return ingredient_payload
 
     def get_recipe_name(self, html):
@@ -83,9 +83,12 @@ class ScraperHf:
         return nutrition_payload
 
 recipe_payload = ScraperHf().start_crawling()
-for r in recipe_payload:
-    print(r)
-    print("--------")
+# for r in recipe_payload:
+#     print(r)
+#     print("--------")
+
+
+print([recipe_payload])
 
 
 
