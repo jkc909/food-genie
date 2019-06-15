@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(version: 2019_06_09_033506) do
     t.bigint "recipe_id"
     t.bigint "ingredient_id"
     t.decimal "amount"
-    t.boolean "not_included"
     t.index ["ingredient_id"], name: "index_recipe_ingredients_on_ingredient_id"
     t.index ["recipe_id"], name: "index_recipe_ingredients_on_recipe_id"
   end
@@ -73,6 +72,9 @@ ActiveRecord::Schema.define(version: 2019_06_09_033506) do
     t.string "image_url"
     t.float "servings"
     t.time "cook_time"
+    t.string "image"
+    t.decimal "rating"
+    t.integer "ratings"
     t.decimal "price_per_serving", precision: 8, scale: 2
     t.index ["prep_category_id"], name: "index_recipes_on_prep_category_id"
     t.index ["user_id"], name: "index_recipes_on_user_id"
