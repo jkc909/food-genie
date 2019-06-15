@@ -16,23 +16,32 @@ class ScraperHf:
             if filename.endswith('.html'):
                 with open((self.cwd+'/'+filename), 'r') as raw_html:
                     html = self.get_parsed_html(raw_html)
+                    recipe_image = self.get_recipe_image(html)
+                    rating = self.get_recipe_rating(html)
                     ingredients = self.get_ingredients(html)
-                    ingredients_not_included = self.get_ingredients_not_included(html)
+                    ingredients += self.get_ingredients_not_included(html)
                     name = self.get_recipe_name(html)
                     prep_time = self.get_prep_time(html)
                     nutrition = self.get_nutrition(html)
-                    self.recipes += [{"name": name, "prep_time": prep_time, "ingredients": ingredients, "ingredients_not_included": ingredients_not_included, "nutrition": nutrition}]
+                    self.recipes += [{"name": name, "recipe_image": recipe_image, "rating": rating, "prep_time": prep_time, "ingredients": ingredients, "nutrition": nutrition}]
         return self.recipes
-
-    def loop_through_files(self):
-        for filename in os.listdir(self.cwd):
-            if filename.endswith('.htm'):
-                with open((self.cwd+'/'+filename), 'r') as raw_html:
-                    parsed_html = self.get_parsed_html(raw_html)
-                    return parsed_html
 
     def get_parsed_html(self, raw_html):
         return BeautifulSoup(raw_html, "lxml")
+
+    def get_recipe_image(self, html):
+        return html.find("img", {"src": re.compile(r'https://res.cloudinary.com/hellofresh/image/upload.')})["src"]
+
+    def get_recipe_rating(self, html):
+        try:
+            rating = html.find("span", {"data-translation-id":"recipe-detail.header.rating"}).text
+        except:
+            rating = ""
+        try:
+            ratings = html.find("span", {"data-translation-id":"recipe-detail.ratings"}).text
+        except:
+            ratings = ""
+        return {"rating": rating, "ratings": ratings}
 
     def get_ingredients(self, html):
         ingredient_payload = []
@@ -46,7 +55,7 @@ class ScraperHf:
                 amount = amount.replace(replace, str(unicodedata.numeric(replace)))
             except:
                 pass
-            ingredient_payload += [{"name": name, "amount": amount, "not_included": "0"}]
+            ingredient_payload += [{"name": name, "amount": amount}]
         return ingredient_payload
 
     def get_ingredients_not_included(self, html):
@@ -60,7 +69,7 @@ class ScraperHf:
                 amount = amount.replace(replace, str(unicodedata.numeric(replace)))
             except:
                 pass
-            ingredient_payload += [{"name": name, "amount": amount, "not_included": "1"}]
+            ingredient_payload += [{"name": name, "amount": amount}]
         return ingredient_payload
 
     def get_recipe_name(self, html):
@@ -88,7 +97,7 @@ recipe_payload = ScraperHf().start_crawling()
 #     print("--------")
 
 
-print([recipe_payload])
+print(recipe_payload)
 
 
 

@@ -4,7 +4,6 @@ class CreateRecipeIngredients < ActiveRecord::Migration[5.2]
       t.belongs_to :recipe 
       t.belongs_to :ingredient
       t.decimal :amount
-      t.boolean :not_included
     end
   end
 end

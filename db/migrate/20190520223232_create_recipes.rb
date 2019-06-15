@@ -11,6 +11,9 @@ class CreateRecipes < ActiveRecord::Migration[5.2]
     	t.string :image_url
 			t.float :servings
 			t.time :cook_time
+			t.string :image
+			t.decimal :rating
+			t.integer :ratings
 			
 			t.decimal :price_per_serving, :precision => 8, :scale => 2
     end
