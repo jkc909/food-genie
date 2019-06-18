@@ -110,19 +110,17 @@ class DragonContainer extends Component {
 		this.state.meals.forEach (m => {
 				recipes[m[1]] = []
 				recipes[m[1]].id = m[0]
-			}
-			)
-			this.state.recipes.forEach (r => {
-				recipes[r.used].push(
-					<div
-					key={`${r.meal_id}_${r.recipe_id}`}
-					onDragStart={(e)=>this.onDragStart(e, r.meal_id, r.recipe_id)}
-					draggable
-					className="dragon-box draggable"
-					style={{backgroundColor:r.bgcolor}}
-				>
-				{r.name}
-			</div>
+		})
+		this.state.recipes.forEach (r => {
+			recipes[r.used].push(
+				<div
+				key={`${r.meal_id}_${r.recipe_id}`}
+				onDragStart={(e)=>this.onDragStart(e, r.meal_id, r.recipe_id)}
+				draggable
+				className="dragon-box draggable"
+				style={{backgroundColor:r.bgcolor}}>
+					{r.name}
+				</div>
 			)
 		});
 		let unused_recipes = recipes[Object.keys(recipes)[0]]
@@ -135,9 +133,8 @@ class DragonContainer extends Component {
 					className="droppable meal-container"
 					onDragOver={(e)=>this.onDragOver(e, meal_title)}
 					onDragLeave={(e)=>this.onDragLeave(e)}
-					onDrop={(e)=>this.onDrop(e, meal_title, recipes[meal_title].id)}
-				>
-					{recipes[meal_title]}
+					onDrop={(e)=>this.onDrop(e, meal_title, recipes[meal_title].id)}>
+				{recipes[meal_title]}
 				</div>
 			</div>
 		)
