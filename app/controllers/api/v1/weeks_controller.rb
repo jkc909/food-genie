@@ -6,10 +6,7 @@ class Api::V1::WeeksController < ApplicationController
     end
 
     def update
-      week_params.each do |meal|
-        new_type = MealTypes.where(name: meal[:used]).first.id
-        Meal.find(meal[:meal_id]).update(meal_types_id: new_type)
-      end
+      Meal.find(week_params[:meal_id]).update!(meal_types_id: week_params[:meal_type_id])
       render status: 200, json: {}
     end
 

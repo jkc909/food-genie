@@ -35,7 +35,8 @@ class RecipesContainer extends Component {
 					used_recipes: body.used_recipes,
 					user_recipes: body.user_recipes,
 					week_of: body.week_of,
-					week_id: body.id })
+					week_id: body.id 
+				})
       })
 	}
 	
