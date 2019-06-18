@@ -5,8 +5,9 @@ class DragonContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			recipes:
-				[]
+			recipes: [],
+			week_of: "",
+			meals: [],
 		};
 	};
 
@@ -29,14 +30,16 @@ class DragonContainer extends Component {
       .then(body => {
         this.setState({ 
 					recipes: body.payload,
-					week_of: body.week_of })
+					week_of: body.week_of,
+					meals: body.meals 
+				})
       })
 	}
 	
 	updateWeek(recipes) {
 		fetch(`/api/v1/weeks/${this.props.params.id}`, {
 			method: 'PATCH',
-			body: JSON.stringify({recipes: recipes}),
+			body: JSON.stringify({recipes}),
 			credentials: 'same-origin',
 			headers: {
 				'Accept': 'application/json',
@@ -51,25 +54,21 @@ class DragonContainer extends Component {
 				throw(error)
 			}
 		})
-		.then(response => response.json())
-		.then(body => {
-			
-		})
 		.catch(error => {
 			console.error(`Error in fetch: ${error.message}`),
 			alert("Error while updating Week")
 		})
 	}
 
-	onDragStart = (ev, title, id) => {
-		ev.dataTransfer.setData("id", id);
-		ev.dataTransfer.setData("title", title)
+	onDragStart = (ev, meal_id, recipe_id) => {
+		ev.dataTransfer.setData("meal_id", meal_id);
+		ev.dataTransfer.setData("recipe_id", recipe_id);
 	};
 
 	onDragOver = (ev, id) => {
 		ev.preventDefault();
 		if (ev.target.classList[1] != "draggable") {
-		ev.dataTransfer.setData("droppable_id", id);
+			ev.dataTransfer.setData("droppable_id", id);
 			ev.target.style.background = "purple"
 		}
 	};
@@ -82,65 +81,42 @@ class DragonContainer extends Component {
 		}
 	};
 
-	onDrop = (ev, cat) => {
-		let id = ev.dataTransfer.getData("id");
-		let title = ev.dataTransfer.getData("title");
+	onDrop = (ev, meal_title, meal_type_id) => {
+		let meal_id = ev.dataTransfer.getData("meal_id");
+		let recipe_id = ev.dataTransfer.getData("recipe_id");
 		if (ev.target.classList[1] != "draggable") {
 			ev.target.style.background = ""
 		};
 	  let recipes = this.state.recipes.filter((recipe) => {
-			if (recipe.used == cat) {
+			if (recipe.used == meal_title) {
 				recipe.used = "unused"
 			};
-			if (recipe.name == title && recipe.meal_id == id ) {
-		           recipe.used = cat;
+			if (recipe.recipe_id == recipe_id && recipe.meal_id == meal_id ) {
+		    recipe.used = meal_title;
 		  };
-		   return recipe;
-	  });
+		  return recipe;
+		});
+		let update_meals = {meal_id: meal_id, meal_type_id: meal_type_id}
 		ev.dataTransfer.clearData()
 		this.setState({
 		  ...this.state,
 		  recipes
 		});
-		this.updateWeek(recipes)
+		this.updateWeek(update_meals)
 	};
 
 	render() {
-		let recipes = {
-			unused: [],
-
-			sunday1: [],
-			monday1: [],
-			tuesday1: [],
-			wednesday1: [],
-			thursday1: [],
-			friday1: [],
-			saturday1: [],
-			
-			sunday2: [],
-			monday2: [],
-			tuesday2: [],
-			wednesday2: [],
-			thursday2: [],
-			friday2: [],
-			saturday2: [],
-						
-			sunday3: [],
-			monday3: [],
-			tuesday3: [],
-			wednesday3: [],
-			thursday3: [],
-			friday3: [],
-			saturday3: []
-		}
-
-
-		this.state.recipes.forEach (r => {
-
-			recipes[r.used].push(
-				<div
+		let recipes = {}
+		this.state.meals.forEach (m => {
+				recipes[m[1]] = []
+				recipes[m[1]].id = m[0]
+			}
+			)
+			this.state.recipes.forEach (r => {
+				recipes[r.used].push(
+					<div
 					key={`${r.meal_id}_${r.recipe_id}`}
-					onDragStart={(e)=>this.onDragStart(e, r.name, r.meal_id)}
+					onDragStart={(e)=>this.onDragStart(e, r.meal_id, r.recipe_id)}
 					draggable
 					className="dragon-box draggable"
 					style={{backgroundColor:r.bgcolor}}
@@ -149,26 +125,25 @@ class DragonContainer extends Component {
 			</div>
 			)
 		});
-
 		let unused_recipes = recipes[Object.keys(recipes)[0]]
 		delete recipes["unused"]
-
-		let used_recipes =	Object.keys(recipes).map(recipe =>
-			<div key={`${recipe}_droppable`}>
-				{recipe}
+		
+		let used_recipes =	Object.keys(recipes).map(meal_title => 
+			<div key={`${meal_title}_droppable`}>
+				{meal_title}
 				<div
 					className="droppable meal-container"
-					onDragOver={(e)=>this.onDragOver(e, recipe)}
+					onDragOver={(e)=>this.onDragOver(e, meal_title)}
 					onDragLeave={(e)=>this.onDragLeave(e)}
-					onDrop={(e)=>this.onDrop(e, recipe)}>
-					{recipes[recipe]}
+					onDrop={(e)=>this.onDrop(e, meal_title, recipes[meal_title].id)}
+				>
+					{recipes[meal_title]}
 				</div>
 			</div>
-)
-
+		)
 		return (
 			<div className="container-drag">
-    		<h2 className="header" style={{backgroundColor:"blue"}}>DRAG SUMTHIN</h2>
+    		<h2 className="header" style={{backgroundColor:"blue"}}>Week of {this.state.week_of}</h2>
 				<div className="container">
 					{used_recipes}
 				</div>
