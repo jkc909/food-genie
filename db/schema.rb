@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2019_06_09_033506) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "meal_time", null: false
   end
 
   create_table "meals", force: :cascade do |t|
@@ -71,7 +72,7 @@ ActiveRecord::Schema.define(version: 2019_06_09_033506) do
     t.text "description"
     t.string "image_url"
     t.float "servings"
-    t.time "cook_time"
+    t.string "cook_time"
     t.string "image"
     t.decimal "rating"
     t.integer "ratings"

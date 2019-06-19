@@ -108,11 +108,38 @@ class DragonContainer extends Component {
 	render() {
 		let recipes = {}
 		this.state.meals.forEach (m => {
-				recipes[m[1]] = []
-				recipes[m[1]].id = m[0]
+			recipes[`${m[1]}_${m[0]}`] = []
+			recipes[`${m[1]}_${m[0]}`].id = m[0]
 		})
+
+		// let week_totals = {}
+		// this.state.meals.forEach (m => {
+		// 	week_totals[`${m[1]}`] = {"nutrition":{"cals":0,"carbs":0,"fat":0,"protein":0}, "cost":0, "time":0}
+		// })
+
+
+
+		//  NEED TO FIGURE OUT WHY I CAN;T CALL VARIABLES INSIDE THESE FUNCTIONS :(
+			// wtfffff
+		
+		// then I will be able to map the meals to an array with 7 indicies and calculate totals from there
+		
+
+		// it is within reach........ 
+
+
+		let week_totals = this.state.meals.map (m => (
+			m
+		))
+
+
 		this.state.recipes.forEach (r => {
-			recipes[r.used].push(
+
+			if (r.used != r.used.split("_")[1]) {
+				debugger;
+			}
+
+			recipes[`${r.used.split("_")[0]}_${r.used.split("_")[1]}`].push(
 				<div
 				key={`${r.meal_id}_${r.recipe_id}`}
 				onDragStart={(e)=>this.onDragStart(e, r.meal_id, r.recipe_id)}
@@ -124,7 +151,7 @@ class DragonContainer extends Component {
 			)
 		});
 		let unused_recipes = recipes[Object.keys(recipes)[0]]
-		delete recipes["unused"]
+		delete recipes["unused_1"]
 		
 		let used_recipes =	Object.keys(recipes).map(meal_title => 
 			<div key={`${meal_title}_droppable`}>

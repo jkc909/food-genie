@@ -10,7 +10,7 @@ class CreateRecipes < ActiveRecord::Migration[5.2]
     	t.text :description
     	t.string :image_url
 			t.float :servings
-			t.time :cook_time
+			t.string :cook_time
 			t.string :image
 			t.decimal :rating
 			t.integer :ratings

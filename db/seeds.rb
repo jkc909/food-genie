@@ -93,32 +93,23 @@ recipes = [{'name': 'Chicken Bulgogi Bowl', 'recipe_image': 'https://res.cloudin
 
 p "create meal types"
 
+			MealTypes.create!(name: "unused", meal_time: 0)
+
 			meal_types= [
-			["unused"],
-			["sunday1"],
-			["monday1"],
-			["tuesday1"],
-			["wednesday1"],
-			["thursday1"],
-			["friday1"],
-			["saturday1"],
-			["sunday2"],
-			["monday2"],
-			["tuesday2"],
-			["wednesday2"],
-			["thursday2"],
-			["friday2"],
-			["saturday2"],	
-			["sunday3"],
-			["monday3"],
-			["tuesday3"],
-			["wednesday3"],
-			["thursday3"],
-			["friday3"],
-			["saturday3"]].flatten
+			["sunday"],
+			["monday"],
+			["tuesday"],
+			["wednesday"],
+			["thursday"],
+			["friday"],
+			["saturday"]].flatten
 
 			meal_types.each do |meal|
-				MealTypes.create!(name: meal)
+				meal_time = 1
+				while meal_time != 4 do
+					MealTypes.create!(name: meal, meal_time: meal_time)
+					meal_time += 1
+				end
 			end
 
 
