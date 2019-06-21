@@ -8,6 +8,7 @@ class DragonContainer extends Component {
 			recipes: [],
 			week_of: "",
 			meals: [],
+			weekly_total: {}
 		};
 	};
 
@@ -31,7 +32,8 @@ class DragonContainer extends Component {
         this.setState({ 
 					recipes: body.payload,
 					week_of: body.week_of,
-					meals: body.meals 
+					meals: body.meals,
+					weekly_total: body.weekly_total
 				})
       })
 	}
@@ -88,19 +90,20 @@ class DragonContainer extends Component {
 			ev.target.style.background = ""
 		};
 	  let recipes = this.state.recipes.filter((recipe) => {
-			if (recipe.used == meal_title) {
-				recipe.used = "unused"
+			let used = recipe.used.split("_")[1]
+			if (used != 1 && used == meal_type_id) {
+				// debugger;
+				recipe.used = "unused_1"
 			};
 			if (recipe.recipe_id == recipe_id && recipe.meal_id == meal_id ) {
-		    recipe.used = meal_title;
+				recipe.used = meal_title;
 		  };
 		  return recipe;
 		});
 		let update_meals = {meal_id: meal_id, meal_type_id: meal_type_id}
 		ev.dataTransfer.clearData()
 		this.setState({
-		  ...this.state,
-		  recipes
+			recipes: recipes
 		});
 		this.updateWeek(update_meals)
 	};
@@ -111,34 +114,8 @@ class DragonContainer extends Component {
 			recipes[`${m[1]}_${m[0]}`] = []
 			recipes[`${m[1]}_${m[0]}`].id = m[0]
 		})
-
-		// let week_totals = {}
-		// this.state.meals.forEach (m => {
-		// 	week_totals[`${m[1]}`] = {"nutrition":{"cals":0,"carbs":0,"fat":0,"protein":0}, "cost":0, "time":0}
-		// })
-
-
-
-		//  NEED TO FIGURE OUT WHY I CAN;T CALL VARIABLES INSIDE THESE FUNCTIONS :(
-			// wtfffff
-		
-		// then I will be able to map the meals to an array with 7 indicies and calculate totals from there
-		
-
-		// it is within reach........ 
-
-
-		let week_totals = this.state.meals.map (m => (
-			m
-		))
-
-
 		this.state.recipes.forEach (r => {
-
-			if (r.used != r.used.split("_")[1]) {
-				debugger;
-			}
-
+			// debugger;
 			recipes[`${r.used.split("_")[0]}_${r.used.split("_")[1]}`].push(
 				<div
 				key={`${r.meal_id}_${r.recipe_id}`}
@@ -160,7 +137,7 @@ class DragonContainer extends Component {
 					className="droppable meal-container"
 					onDragOver={(e)=>this.onDragOver(e, meal_title)}
 					onDragLeave={(e)=>this.onDragLeave(e)}
-					onDrop={(e)=>this.onDrop(e, meal_title, recipes[meal_title].id)}>
+					onDrop={(e)=>this.onDrop(e, meal_title, recipes[meal_title].id, recipes[meal_title].nutrition)}>
 				{recipes[meal_title]}
 				</div>
 			</div>
@@ -175,7 +152,7 @@ class DragonContainer extends Component {
 					<UnusedTile
 						key="unused"
 						recipes={unused_recipes}
-						onDragOver={(e)=>this.onDragOver(e, "unused", 1)}
+						onDragOver={(e)=>this.onDragOver(e, "unused_1", 1)}
 						onDragLeave={this.onDragLeave}
 						onDrop={this.onDrop}
 						/>

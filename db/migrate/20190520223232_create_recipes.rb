@@ -10,12 +10,12 @@ class CreateRecipes < ActiveRecord::Migration[5.2]
     	t.text :description
     	t.string :image_url
 			t.float :servings
-			t.string :cook_time
+			t.integer :cook_time
 			t.string :image
 			t.decimal :rating
 			t.integer :ratings
 			
-			t.decimal :price_per_serving, :precision => 8, :scale => 2
+			t.money :cost, default: 0, :scale => 2
     end
   end
 end

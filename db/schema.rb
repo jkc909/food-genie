@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_09_033506) do
+ActiveRecord::Schema.define(version: 2019_06_19_233428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,11 +72,11 @@ ActiveRecord::Schema.define(version: 2019_06_09_033506) do
     t.text "description"
     t.string "image_url"
     t.float "servings"
-    t.string "cook_time"
+    t.integer "cook_time"
     t.string "image"
     t.decimal "rating"
     t.integer "ratings"
-    t.decimal "price_per_serving", precision: 8, scale: 2
+    t.money "cost", scale: 2, default: "0.0"
     t.index ["prep_category_id"], name: "index_recipes_on_prep_category_id"
     t.index ["user_id"], name: "index_recipes_on_user_id"
   end
@@ -91,6 +91,17 @@ ActiveRecord::Schema.define(version: 2019_06_09_033506) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "weekly_totals", force: :cascade do |t|
+    t.bigint "week_id"
+    t.integer "calories"
+    t.integer "fat"
+    t.integer "carbs"
+    t.integer "protein"
+    t.integer "cost"
+    t.integer "time"
+    t.index ["week_id"], name: "index_weekly_totals_on_week_id"
   end
 
   create_table "weeks", force: :cascade do |t|
