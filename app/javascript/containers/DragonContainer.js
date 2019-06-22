@@ -8,7 +8,7 @@ class DragonContainer extends Component {
 			recipes: [],
 			week_of: "",
 			meals: [],
-			weekly_total: {}
+			daily_totals: {}
 		};
 	};
 
@@ -33,7 +33,7 @@ class DragonContainer extends Component {
 					recipes: body.payload,
 					week_of: body.week_of,
 					meals: body.meals,
-					weekly_total: body.weekly_total
+					daily_totals: body.daily_totals
 				})
       })
 	}
@@ -83,27 +83,29 @@ class DragonContainer extends Component {
 		}
 	};
 
-	onDrop = (ev, meal_title, meal_type_id) => {
+	onDrop = (ev, meal_type_id) => {
+		
 		let meal_id = ev.dataTransfer.getData("meal_id");
 		let recipe_id = ev.dataTransfer.getData("recipe_id");
+		let daily_totals = this.state.daily_totals;
 		if (ev.target.classList[1] != "draggable") {
 			ev.target.style.background = ""
 		};
 	  let recipes = this.state.recipes.filter((recipe) => {
-			let used = recipe.used.split("_")[1]
-			if (used != 1 && used == meal_type_id) {
-				// debugger;
-				recipe.used = "unused_1"
+			if (recipe.used != 1 && recipe.used == meal_type_id) {
+				recipe.used = 1
 			};
 			if (recipe.recipe_id == recipe_id && recipe.meal_id == meal_id ) {
-				recipe.used = meal_title;
+				// debugger;
+				recipe.used = meal_type_id;
 		  };
 		  return recipe;
 		});
 		let update_meals = {meal_id: meal_id, meal_type_id: meal_type_id}
 		ev.dataTransfer.clearData()
 		this.setState({
-			recipes: recipes
+			recipes: recipes,
+			daily_totals: daily_totals
 		});
 		this.updateWeek(update_meals)
 	};
@@ -111,12 +113,12 @@ class DragonContainer extends Component {
 	render() {
 		let recipes = {}
 		this.state.meals.forEach (m => {
-			recipes[`${m[1]}_${m[0]}`] = []
-			recipes[`${m[1]}_${m[0]}`].id = m[0]
+			recipes[m.id] = [{"meal": m}]
 		})
+		// debugger;
 		this.state.recipes.forEach (r => {
 			// debugger;
-			recipes[`${r.used.split("_")[0]}_${r.used.split("_")[1]}`].push(
+			recipes[r.used].push(
 				<div
 				key={`${r.meal_id}_${r.recipe_id}`}
 				onDragStart={(e)=>this.onDragStart(e, r.meal_id, r.recipe_id)}
@@ -127,21 +129,24 @@ class DragonContainer extends Component {
 				</div>
 			)
 		});
-		let unused_recipes = recipes[Object.keys(recipes)[0]]
-		delete recipes["unused_1"]
 		
-		let used_recipes =	Object.keys(recipes).map(meal_title => 
-			<div key={`${meal_title}_droppable`}>
-				{meal_title}
+		let unused_recipes = recipes[1]
+		delete recipes[1]
+		let used_recipes = Object.keys(recipes).map(meal_id => 
+			<div key={meal_id}>
+				{recipes[meal_id][0].meal.day}
 				<div
 					className="droppable meal-container"
-					onDragOver={(e)=>this.onDragOver(e, meal_title)}
+					onDragOver={(e)=>this.onDragOver(e, meal_id)}
 					onDragLeave={(e)=>this.onDragLeave(e)}
-					onDrop={(e)=>this.onDrop(e, meal_title, recipes[meal_title].id, recipes[meal_title].nutrition)}>
-				{recipes[meal_title]}
+					onDrop={(e)=>this.onDrop(e, meal_id)}>
+					{recipes[meal_id][1]}
 				</div>
 			</div>
 		)
+
+
+
 		return (
 			<div className="container-drag">
     		<h2 className="header" style={{backgroundColor:"blue"}}>Week of {this.state.week_of}</h2>
@@ -152,7 +157,7 @@ class DragonContainer extends Component {
 					<UnusedTile
 						key="unused"
 						recipes={unused_recipes}
-						onDragOver={(e)=>this.onDragOver(e, "unused_1", 1)}
+						onDragOver={this.onDragOver}
 						onDragLeave={this.onDragLeave}
 						onDrop={this.onDrop}
 						/>

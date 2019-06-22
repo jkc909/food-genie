@@ -10,10 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_19_233428) do
+ActiveRecord::Schema.define(version: 2019_06_22_134937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "daily_totals", force: :cascade do |t|
+    t.bigint "week_id"
+    t.bigint "day_id"
+    t.integer "calories"
+    t.integer "fat"
+    t.integer "carbs"
+    t.integer "protein"
+    t.money "cost", scale: 2, default: "0.0"
+    t.integer "time"
+    t.index ["day_id"], name: "index_daily_totals_on_day_id"
+    t.index ["week_id"], name: "index_daily_totals_on_week_id"
+  end
+
+  create_table "days", force: :cascade do |t|
+    t.string "name"
+  end
 
   create_table "ingredients", force: :cascade do |t|
     t.string "name"
@@ -22,19 +39,22 @@ ActiveRecord::Schema.define(version: 2019_06_19_233428) do
   end
 
   create_table "meal_types", force: :cascade do |t|
-    t.string "name", null: false
+    t.bigint "day_id", null: false
+    t.integer "meal_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "meal_time", null: false
+    t.index ["day_id"], name: "index_meal_types_on_day_id"
   end
 
   create_table "meals", force: :cascade do |t|
     t.bigint "week_id", null: false
     t.bigint "recipe_id"
-    t.bigint "meal_types_id"
+    t.bigint "meal_type_id"
+    t.bigint "prep_category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["meal_types_id"], name: "index_meals_on_meal_types_id"
+    t.index ["meal_type_id"], name: "index_meals_on_meal_type_id"
+    t.index ["prep_category_id"], name: "index_meals_on_prep_category_id"
     t.index ["recipe_id"], name: "index_meals_on_recipe_id"
     t.index ["week_id"], name: "index_meals_on_week_id"
   end
@@ -65,7 +85,6 @@ ActiveRecord::Schema.define(version: 2019_06_19_233428) do
 
   create_table "recipes", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "prep_category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title", null: false
@@ -77,7 +96,6 @@ ActiveRecord::Schema.define(version: 2019_06_19_233428) do
     t.decimal "rating"
     t.integer "ratings"
     t.money "cost", scale: 2, default: "0.0"
-    t.index ["prep_category_id"], name: "index_recipes_on_prep_category_id"
     t.index ["user_id"], name: "index_recipes_on_user_id"
   end
 
@@ -91,17 +109,6 @@ ActiveRecord::Schema.define(version: 2019_06_19_233428) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  end
-
-  create_table "weekly_totals", force: :cascade do |t|
-    t.bigint "week_id"
-    t.integer "calories"
-    t.integer "fat"
-    t.integer "carbs"
-    t.integer "protein"
-    t.integer "cost"
-    t.integer "time"
-    t.index ["week_id"], name: "index_weekly_totals_on_week_id"
   end
 
   create_table "weeks", force: :cascade do |t|

@@ -1,7 +1,8 @@
-class CreateWeeklyTotals < ActiveRecord::Migration[5.2]
+class CreateDailyTotals < ActiveRecord::Migration[5.2]
   def change
-    create_table :weekly_totals do |t|
+    create_table :daily_totals do |t|
       t.belongs_to :week
+      t.belongs_to :day
       t.integer :calories
       t.integer :fat
       t.integer :carbs

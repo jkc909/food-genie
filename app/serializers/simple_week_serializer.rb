@@ -1,5 +1,5 @@
 class SimpleWeekSerializer < ActiveModel::Serializer
-  attributes :id, :week_of, :meals, :weekly_total, :payload
+  attributes :id, :week_of, :meals, :daily_totals, :payload
 
 	def payload
 		recipes = []
@@ -7,37 +7,48 @@ class SimpleWeekSerializer < ActiveModel::Serializer
 			recipe = meal.recipe
 			name = recipe[:title]
 			recipe_id = meal[:recipe_id]
-			meal_name = meal.meal_types[:name]
-			used = "#{meal.meal_types[:name]}_#{meal.meal_types.id}_#{meal.meal_types.meal_time}"
+			# meal_name = meal.meal_type[:name]
+			# used = "#{meal.meal_type[:name]}_#{meal.meal_type.id}_#{meal.meal_type.meal_time}"
+			used = meal.meal_type_id
+			day_name = meal.meal_type.day.name
 			meal_id = meal[:id]
 
 			cost = recipe.cost.to_f
 			time = recipe.cook_time
-			nutrition = {}
-			nutrition[:cals] = recipe.recipe_nutrition_value.calories
-			nutrition[:fat] = recipe.recipe_nutrition_value.fat
-			nutrition[:carbs] = recipe.recipe_nutrition_value.carbs
-			nutrition[:protein] = recipe.recipe_nutrition_value.protein
+			calories = recipe.recipe_nutrition_value.calories
+			fat = recipe.recipe_nutrition_value.fat
+			carbs = recipe.recipe_nutrition_value.carbs
+			protein = recipe.recipe_nutrition_value.protein
 			
-			metrics = {nutrition: nutrition, cost: cost, time: time}
+			metrics = {
+				calories: calories, 
+				fat: fat, 
+				carbs: carbs, 
+				protein: protein, 
+				cost: cost, 
+				time: time
+			}
 
 			recipes << {
 				name: name, 
 				bgcolor: "red", 
 				used: used, 
 				meal_id: meal_id,
+				day_name: day_name,
 				recipe_id: recipe_id,
-				metrics: metrics
+				metrics: metrics,
 			}
 		end
+		# binding.pry
 	  return recipes
 	end
 
 	def meals
-		MealTypes.all.map{ |mt| [mt[:id],mt[:name],mt[:meal_time]]}
+		# binding.pry
+		MealType.all.order("meal_time, id").map{ |mt| {"id": mt[:id], "day": mt.day[:name], "time": mt[:meal_time]} }
 	end
 
-	def weekly_total
-		weekly_total = object.weekly_total
+	def daily_totals
+		daily_totals = object.daily_totals
 	end
 end

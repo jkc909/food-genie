@@ -6,7 +6,7 @@ class CompleteWeekSerializer < ActiveModel::Serializer
 		object.meals.find_each do |meal|
 			name = meal.recipe[:title]
 			recipe_id = meal[:recipe_id]
-			used = meal.meal_types[:name]
+			used = meal.meal_type[:name]
 			meal_id = meal[:id]
 
 			recipes << [{name: name, 
