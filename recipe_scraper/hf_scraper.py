@@ -78,7 +78,7 @@ class ScraperHf:
 
     def get_prep_time(self, html):
         prep_time = html.find('div', {'class': 'fela-19qpnoj'}).find_all('span')
-        prep_time = prep_time[2].text
+        prep_time = prep_time[2].text.split(" ")[0]
         return prep_time
 
     def get_nutrition(self, html):
