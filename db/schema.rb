@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2019_06_22_134937) do
     t.integer "fat"
     t.integer "carbs"
     t.integer "protein"
-    t.money "cost", scale: 2, default: "0.0"
+    t.integer "cost"
     t.integer "time"
     t.index ["day_id"], name: "index_daily_totals_on_day_id"
     t.index ["week_id"], name: "index_daily_totals_on_week_id"
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 2019_06_22_134937) do
     t.string "image"
     t.decimal "rating"
     t.integer "ratings"
-    t.money "cost", scale: 2, default: "0.0"
+    t.integer "cost", default: 0
     t.index ["user_id"], name: "index_recipes_on_user_id"
   end
 

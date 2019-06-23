@@ -7,7 +7,7 @@ class CreateDailyTotals < ActiveRecord::Migration[5.2]
       t.integer :fat
       t.integer :carbs
       t.integer :protein
-      t.money :cost, default: 0, :scale => 2
+      t.integer :cost
       t.integer :time
     end
   end

@@ -14,7 +14,7 @@ class CreateRecipes < ActiveRecord::Migration[5.2]
 			t.decimal :rating
 			t.integer :ratings
 			
-			t.money :cost, default: 0, :scale => 2
+			t.integer :cost, default: 0
     end
   end
 end

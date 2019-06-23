@@ -11,7 +11,7 @@ const UnusedTile = props => {
     		<div className="unused-container unused container"
 						onDragOver={(e)=>props.onDragOver(e, 1)}
 						onDragLeave={(e)=>props.onDragLeave(e)}
-						onDrop={(e)=>{props.onDrop(e, 1)}}>
+						onDrop={(e)=>{props.onDrop(e, 1, 0)}}>
 					{props.recipes}
 				</div>
     </div>

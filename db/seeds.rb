@@ -18,7 +18,7 @@ p "create Users"
 		
 p "create Weeks"
 	weeks = 0
-	until weeks == 5 do 
+	until weeks == 11 do 
 		week_of = Time.now.weeks_since(weeks).beginning_of_week
 		Week.create!(week_of: week_of, user: user)
 		weeks += 1
@@ -42,7 +42,7 @@ p "create Recipes"
 			user: user,
 			cook_time: recipe[:prep_time],
 			servings: 2,
-			cost: rand(1000)/100.to_f+5.round(2),
+			cost: rand(1000) + 500,
 			image: recipe[:product_image],
 			rating: recipe[:rating][:rating],
 			ratings: recipe[:rating][:ratings]
@@ -117,7 +117,7 @@ p "create Meals and weekly totals"
 					prep_category: PrepCategory.offset(rand(PrepCategory.count)).first) 
 			i += 1
 		end
-		Day.all.each do |day|
+		days.each do |day|
 			DailyTotal.create!(week: week, day: day, calories: 0, fat: 0, carbs: 0, protein: 0, time: 0, cost: 0)
 		end
 	end

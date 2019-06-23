@@ -8,7 +8,7 @@ class DragonContainer extends Component {
 			recipes: [],
 			week_of: "",
 			meals: [],
-			daily_totals: {}
+			daily_totals: []
 		};
 	};
 
@@ -62,9 +62,11 @@ class DragonContainer extends Component {
 		})
 	}
 
-	onDragStart = (ev, meal_id, recipe_id) => {
+	onDragStart = (ev, meal_id, recipe_id, day_id, meal_type_id) => {
 		ev.dataTransfer.setData("meal_id", meal_id);
 		ev.dataTransfer.setData("recipe_id", recipe_id);
+		ev.dataTransfer.setData("day_id", day_id);
+		ev.dataTransfer.setData("meal_type_id", meal_type_id);
 	};
 
 	onDragOver = (ev, id) => {
@@ -83,45 +85,88 @@ class DragonContainer extends Component {
 		}
 	};
 
-	onDrop = (ev, meal_type_id) => {
-		
-		let meal_id = ev.dataTransfer.getData("meal_id");
-		let recipe_id = ev.dataTransfer.getData("recipe_id");
-		let daily_totals = this.state.daily_totals;
-		if (ev.target.classList[1] != "draggable") {
-			ev.target.style.background = ""
-		};
-	  let recipes = this.state.recipes.filter((recipe) => {
-			if (recipe.used != 1 && recipe.used == meal_type_id) {
-				recipe.used = 1
+	onDrop = (ev, meal_type_id, day_id) => {
+		let old_meal_type_id = ev.dataTransfer.getData("meal_type_id");
+		if (old_meal_type_id != meal_type_id) {
+			let old_meal_id = ev.dataTransfer.getData("meal_id");
+			let old_recipe_id = ev.dataTransfer.getData("recipe_id");
+			let old_day_id = ev.dataTransfer.getData("day_id");
+			let daily_totals = this.state.daily_totals;
+			let update_totals = ["",""]
+			if (ev.target.classList[1] != "draggable") {
+				ev.target.style.background = ""
 			};
-			if (recipe.recipe_id == recipe_id && recipe.meal_id == meal_id ) {
-				// debugger;
-				recipe.used = meal_type_id;
-		  };
-		  return recipe;
-		});
-		let update_meals = {meal_id: meal_id, meal_type_id: meal_type_id}
-		ev.dataTransfer.clearData()
-		this.setState({
-			recipes: recipes,
-			daily_totals: daily_totals
-		});
-		this.updateWeek(update_meals)
+			let recipes = this.state.recipes.filter((recipe) => {
+				if (old_meal_type_id != meal_type_id && recipe.meal_type_id != 1 && recipe.meal_type_id == meal_type_id) {
+					daily_totals.filter((dt) => {
+						if (dt.day_id == day_id) {
+							dt.calories -= recipe.metrics.calories
+							dt.fat -= recipe.metrics.fat
+							dt.carbs -= recipe.metrics.carbs
+							dt.protein -= recipe.metrics.protein
+							dt.time -= recipe.metrics.time
+							dt.cost -= recipe.metrics.cost
+							update_totals[0] = dt
+						}}
+					);
+						recipe.meal_type_id = 1	
+				};
+
+				if (recipe.meal_type_id != 1 && recipe.meal_type_id == old_meal_type_id && old_meal_type_id != meal_type_id) {
+					// debugger;
+					daily_totals.filter((dt) => {
+						if (dt.day_id == old_day_id && old_day_id != day_id) {
+							dt.calories -= recipe.metrics.calories
+							dt.fat -= recipe.metrics.fat
+							dt.carbs -= recipe.metrics.carbs
+							dt.protein -= recipe.metrics.protein
+							dt.time -= recipe.metrics.time
+							dt.cost -= recipe.metrics.cost
+							update_totals[0] = dt
+						}}
+					);
+				};
+
+				if (recipe.meal_id == old_meal_id) {
+					daily_totals.filter((dt) => {
+						if (dt.day_id == day_id && old_day_id != day_id) {
+							dt.calories += recipe.metrics.calories
+							dt.fat += recipe.metrics.fat
+							dt.carbs += recipe.metrics.carbs
+							dt.protein += recipe.metrics.protein
+							dt.time += recipe.metrics.time
+							dt.cost += recipe.metrics.cost
+							update_totals[1] = dt
+						}
+					})
+					recipe.meal_type_id = meal_type_id;
+				};
+				return recipe;
+			});
+			ev.dataTransfer.clearData()
+			this.setState({
+				recipes: recipes,
+				daily_totals: daily_totals
+			});
+			
+				let update_meals = {meal_id: old_meal_id, meal_type_id: meal_type_id, update_totals: update_totals}
+				this.updateWeek(update_meals)
+		}
 	};
 
 	render() {
-		let recipes = {}
+		let recipes = []
 		this.state.meals.forEach (m => {
 			recipes[m.id] = [{"meal": m}]
 		})
-		// debugger;
+
 		this.state.recipes.forEach (r => {
 			// debugger;
-			recipes[r.used].push(
+			let day_id = recipes[r.meal_type_id][0].meal.day_id
+			recipes[r.meal_type_id].push(
 				<div
 				key={`${r.meal_id}_${r.recipe_id}`}
-				onDragStart={(e)=>this.onDragStart(e, r.meal_id, r.recipe_id)}
+				onDragStart={(e)=>this.onDragStart(e, r.meal_id, r.recipe_id, day_id, r.meal_type_id)}
 				draggable
 				className="dragon-box draggable"
 				style={{backgroundColor:r.bgcolor}}>
@@ -139,12 +184,21 @@ class DragonContainer extends Component {
 					className="droppable meal-container"
 					onDragOver={(e)=>this.onDragOver(e, meal_id)}
 					onDragLeave={(e)=>this.onDragLeave(e)}
-					onDrop={(e)=>this.onDrop(e, meal_id)}>
+					onDrop={(e)=>this.onDrop(e, meal_id, recipes[meal_id][0].meal.day_id)}>
 					{recipes[meal_id][1]}
 				</div>
 			</div>
 		)
 
+			// debugger;
+			let daily_totals = this.state.daily_totals.map(dt =>
+				<div key={dt.id}>
+				<div>{dt.calories}</div>
+				<div>{dt.time}</div>
+				<div>{dt.cost / 100}</div>
+			</div>		
+
+			)
 
 
 		return (
@@ -152,6 +206,7 @@ class DragonContainer extends Component {
     		<h2 className="header" style={{backgroundColor:"blue"}}>Week of {this.state.week_of}</h2>
 				<div className="container">
 					{used_recipes}
+				{daily_totals}
 				</div>
 				<div >
 					<UnusedTile
