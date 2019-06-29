@@ -24,7 +24,7 @@ class ScraperHf:
                     self.recipe_id = (f'recipe_{rec_id}') 
                     html = self.get_parsed_html(raw_html)
                     name = self.get_recipe_name(html)
-                    self.parsed_name = re.sub('[^0-9a-zA-Z]+', '', name)
+                    self.parsed_name = re.sub('[^0-9a-zA-Z]+', '', name)[:200]
                     recipe_image = self.get_recipe_image(html)
                     rating = self.get_recipe_rating(html)
                     ingredients = self.get_ingredients(html)
