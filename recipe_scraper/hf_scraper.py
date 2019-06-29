@@ -1,9 +1,14 @@
 import os
 import re
 import unicodedata
+import time
+import requests
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
+
+
+request_headers = {"DNT": "1","Referer": "https://www.hellofresh.com/recipes/?redirectedFromAccountArea=true","User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36"}
 
 class ScraperHf:
     def __init__(self):
@@ -11,26 +16,38 @@ class ScraperHf:
 
     def start_crawling(self):
         self.recipes = []
+        rec_id = 1
         for filename in os.listdir(self.cwd):
             print(f"scrape {filename}")
             if filename.endswith('.html'):
                 with open((self.cwd+'/'+filename), 'r') as raw_html:
+                    self.recipe_id = (f'recipe_{rec_id}') 
                     html = self.get_parsed_html(raw_html)
+                    name = self.get_recipe_name(html)
+                    self.parsed_name = re.sub('[^0-9a-zA-Z]+', '', name)[:200]
                     recipe_image = self.get_recipe_image(html)
                     rating = self.get_recipe_rating(html)
                     ingredients = self.get_ingredients(html)
                     ingredients += self.get_ingredients_not_included(html)
-                    name = self.get_recipe_name(html)
                     prep_time = self.get_prep_time(html)
                     nutrition = self.get_nutrition(html)
-                    self.recipes += [{"name": name, "recipe_image": recipe_image, "rating": rating, "prep_time": prep_time, "ingredients": ingredients, "nutrition": nutrition}]
+                    # import code; code.interact(local=dict(globals(), **locals()))
+                    self.recipes += [{"recipe_id": self.recipe_id, "name": name, "parsed_name": self.parsed_name, "recipe_image": recipe_image, "rating": rating, "prep_time": prep_time, "ingredients": ingredients, "nutrition": nutrition}]
+                    rec_id += 1
         return self.recipes
 
     def get_parsed_html(self, raw_html):
         return BeautifulSoup(raw_html, "lxml")
 
     def get_recipe_image(self, html):
-        return html.find("img", {"src": re.compile(r'https://res.cloudinary.com/hellofresh/image/upload.')})["src"]
+        image_url = html.find("img", {"src": re.compile(r'https://res.cloudinary.com/hellofresh/image/upload.')})["src"]
+
+        # image = requests.get(image_url, headers=request_headers).content
+        # with open(self.cwd+"/images/"+self.parsed_name+".jpg", 'wb') as handler:
+        #     handler.write(image)
+        # print("image has been saved")
+        # time.sleep(10)
+        return image_url
 
     def get_recipe_rating(self, html):
         try:

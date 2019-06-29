@@ -113,7 +113,6 @@ class DragonContainer extends Component {
 				};
 
 				if (recipe.meal_type_id != 1 && recipe.meal_type_id == old_meal_type_id && old_meal_type_id != meal_type_id) {
-					// debugger;
 					daily_totals.filter((dt) => {
 						if (dt.day_id == old_day_id && old_day_id != day_id) {
 							dt.calories -= recipe.metrics.calories
@@ -161,7 +160,6 @@ class DragonContainer extends Component {
 		})
 
 		this.state.recipes.forEach (r => {
-			// debugger;
 			let day_id = recipes[r.meal_type_id][0].meal.day_id
 			recipes[r.meal_type_id].push(
 				<div
@@ -171,6 +169,7 @@ class DragonContainer extends Component {
 				className="dragon-box draggable"
 				style={{backgroundColor:r.bgcolor}}>
 					{r.name}
+					<img src = {r.image_url} />
 				</div>
 			)
 		});
@@ -190,7 +189,7 @@ class DragonContainer extends Component {
 			</div>
 		)
 
-			// debugger;
+
 			let daily_totals = this.state.daily_totals.map(dt =>
 				<div key={dt.id}>
 				<div>{dt.calories}</div>
