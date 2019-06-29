@@ -2,7 +2,7 @@
 
 ### What is it?
 
-Weekly meal planning app to help manage and automate nourishment decisions, built with Rails, React and Python. 
+Weekly meal planning app to help manage and automate nourishment decisions. Built with Rails, React and Python. 
 
 *in early development*
 
