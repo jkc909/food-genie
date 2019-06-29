@@ -5,7 +5,9 @@ class CreateRecipes < ActiveRecord::Migration[5.2]
 
 			t.timestamps null: false
 
-    	t.string :title, null: false
+			t.string :title, null: false
+			t.string :parsed_name
+
     	t.text :description
     	t.string :image_url
 			t.float :servings

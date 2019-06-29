@@ -18,6 +18,8 @@ class SimpleWeekSerializer < ActiveModel::Serializer
 			carbs = recipe.recipe_nutrition_value.carbs
 			protein = recipe.recipe_nutrition_value.protein
 			
+			image_url = "https://food-genie.s3.amazonaws.com/recipes/images/#{recipe.parsed_name}.jpg"
+
 			metrics = {
 				calories: calories, 
 				fat: fat, 
@@ -34,6 +36,7 @@ class SimpleWeekSerializer < ActiveModel::Serializer
 				meal_id: meal_id,
 				day_name: day_name,
 				recipe_id: recipe_id,
+				image_url: image_url,
 				metrics: metrics,
 			}
 		end
