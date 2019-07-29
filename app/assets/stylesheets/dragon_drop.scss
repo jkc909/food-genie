@@ -1,8 +1,9 @@
 
 
 .dragon-box {
-	height: 100px;
-	width: 100px;
+	height: 300px;
+	width: 200px;
+	overflow: hidden;
 }
 
 .dragon-box-drag-hover {
@@ -16,12 +17,15 @@
 }
 
 .meal-container {
-	width: 150px;
-	height: 150px;
-	background-color: orange;
+	width: 100%;
+	height: 200px;
+	background-color: rgb(173, 35, 0);
 }
 
-
+.recipe-title {
+	height: 50px;
+	text-overflow: ellipsis;
+}
 
 
 // .unused-container:hover {
@@ -33,3 +37,32 @@
 // .droppable:hover,.droppable.hover{
 // 	background-color: purple;
 // }
+
+
+.background-image{
+	// height: 100vh;
+	display:flex;
+	min-width: 100%;
+	// height: 100%;
+	background: image-url("background_image.jpg");
+	background-position: center;
+	background-size: cover;
+	// background-attachment: fixed;
+  }
+
+.cutting-board {
+	// display:flex;
+	background-image: image-url("cutting_board.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	// background-attachment: fixed;
+	background-size: 100% 100%;
+}
+
+.center {
+  margin: auto;
+  width: 100%;
+  padding: 10px;
+  align-content: center;
+  display: flex;
+}

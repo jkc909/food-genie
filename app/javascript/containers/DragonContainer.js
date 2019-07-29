@@ -168,7 +168,7 @@ class DragonContainer extends Component {
 				draggable
 				className="dragon-box draggable"
 				style={{backgroundColor:r.bgcolor}}>
-					{r.name}
+					<div className="recipe-title">{r.name}</div>
 					<img src = {r.image_url} />
 				</div>
 			)
@@ -188,7 +188,11 @@ class DragonContainer extends Component {
 				</div>
 			</div>
 		)
-
+		
+		let days = this.state.meals.map (m => 
+			m.day
+		)
+		days = [...new Set(days)]; 
 
 			let daily_totals = this.state.daily_totals.map(dt =>
 				<div key={dt.id}>
@@ -202,10 +206,10 @@ class DragonContainer extends Component {
 
 		return (
 			<div className="container-drag">
-    		<h2 className="header" style={{backgroundColor:"blue"}}>Week of {this.state.week_of}</h2>
-				<div className="container">
+    		<h2 className="header" style={{backgroundColor:"green"}}>Week of {this.state.week_of}</h2>
+				<div className="container cutting-board">
 					{used_recipes}
-				{daily_totals}
+					{daily_totals}
 				</div>
 				<div >
 					<UnusedTile

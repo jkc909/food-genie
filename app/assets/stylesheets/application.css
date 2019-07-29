@@ -17,7 +17,7 @@
 
 .container {
 	display: grid;
-	grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
+	grid-template-columns: 200px 200px 200px 200px 200px 200px 200px;
 	grid-gap: 10px;
 	grid-template-rows: auto;
 }
@@ -37,9 +37,9 @@
 }
 
 
- .center {
+ /* .center {
 	margin: auto;
 	width: 50%;
 	border: 3px solid green;
 	padding: 10px;
-  }
+  } */
