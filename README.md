@@ -1,24 +1,21 @@
-# README
+# Food Genie
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### What is it?
 
-Things you may want to cover:
+Food Genie scrapes products on sale from local grocery stores and suggests recipes based on ingredients that are on sale. 
 
-* Ruby version
+Food Genie is also a weekly meal planning app to help manage and automate nourishment decisions. 
 
-* System dependencies
+Built with Rails, React and Python. 
 
-* Configuration
+*in early development*
 
-* Database creation
+### What does it do?
 
-* Database initialization
+Users have a pool of recipes, and they can drag and drop recipes into a weekly meal planner. The app tracks daily calories, spending, and time spent cooking. In addition to tracking these metrics, the app will also generate a shopping list for the week. 
 
-* How to run the test suite
+Recipes are populated by third-party APIs, web scrapers, and user input.
 
-* Services (job queues, cache servers, search engines, etc.)
+### Why?
 
-* Deployment instructions
-
-* ...
+Personal enrichment. Also, this has a practical use in my daily life. 
