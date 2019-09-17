@@ -2,15 +2,14 @@
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
-Devise.setup do |config|  config.secret_key = Rails.application.secret_key_base
-
+Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = 'fa1350532a9673b0268a18afc3ed244b45d99681a0341f7b2bb512b5a37fc491924e8fc058cdd9afa1114399e7cb1d387a96c5f0e5f8bb37cf86fb532c446423'
-  
+  # config.secret_key = '1bb938ed8c129821d71163b34ed779506fd94e3b11631db087b50027fc3072017dfa098ff71b977a2cc9c3feac0a0e15f5f7bed3d4c208238b32a683d41fb1f6'
+
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'
@@ -115,7 +114,7 @@ Devise.setup do |config|  config.secret_key = Rails.application.secret_key_base
   config.stretches = Rails.env.test? ? 1 : 11
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = 'eb079715d35bbe6c94f249e3d10aa773b300a30b76ec8cb832515aa1b0633c13e4bfad6e25eaf2c65895189a88139e5cbaa1ee158ad52835039c292497375191'
+  # config.pepper = '678269cb3ac7360e81a6cf67a8c65138775f0b3a985050b441451608356bea0693a7c897ef54f6914cb984eb82d7f9aa8e9d57891a386c73074b9bf43e05d4a6'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -127,8 +126,11 @@ Devise.setup do |config|  config.secret_key = Rails.application.secret_key_base
   # A period that the user is allowed to access the website even without
   # confirming their account. For instance, if set to 2.days, the user will be
   # able to access the website for two days without confirming their account,
-  # access will be blocked just in the third day. Default is 0.days, meaning
-  # the user cannot access the website without confirming their account.
+  # access will be blocked just in the third day.
+  # You can also set it to nil, which will allow the user to access the website
+  # without confirming their account.
+  # Default is 0.days, meaning the user cannot access the website without
+  # confirming their account.
   # config.allow_unconfirmed_access_for = 2.days
 
   # A period that the user is allowed to confirm their account before their
@@ -288,4 +290,10 @@ Devise.setup do |config|  config.secret_key = Rails.application.secret_key_base
   # ActiveSupport.on_load(:devise_failure_app) do
   #   include Turbolinks::Controller
   # end
+
+  # ==> Configuration for :registerable
+
+  # When set to false, does not sign a user in automatically after their password is
+  # changed. Defaults to true, so a user is signed in automatically after changing a password.
+  # config.sign_in_after_change_password = true
 end

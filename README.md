@@ -1,17 +1,24 @@
-# Food Genie
+# README
 
-### What is it?
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-Weekly meal planning app to help manage and automate nourishment decisions. Built with Rails, React and Python. 
+Things you may want to cover:
 
-*in early development*
+* Ruby version
 
-### What does it do?
+* System dependencies
 
-Users have a pool of recipes, and they can drag and drop recipes into a weekly meal planner. The app tracks daily calories, spending, and time spent cooking. In addition to tracking these metrics, the app will also generate a shopping list for the week. 
+* Configuration
 
-Recipes are populated by third-party APIs, web scrapers, and user input.
+* Database creation
 
-### Why?
+* Database initialization
 
-Personal enrichment. Also, this has a practical use in my daily life. 
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
