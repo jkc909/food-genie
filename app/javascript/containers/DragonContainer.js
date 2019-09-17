@@ -153,12 +153,24 @@ class DragonContainer extends Component {
 		}
 	};
 
+	handleClickCollapse = (ev) => {
+		document.querySelectorAll(".collapsible").forEach(function(collapsible) {
+			if (ev.target.classList[1] == collapsible.classList[1]){
+				collapsible.nextElementSibling.style.maxHeight = collapsible.nextElementSibling.scrollHeight + "px";
+			} else {
+				collapsible.nextElementSibling.style.maxHeight = null;
+			} 
+		})
+	}
+
 	render() {
 		let recipes = []
 		this.state.meals.forEach (m => {
 			recipes[m.id] = [{"meal": m}]
 		})
 
+
+		
 		this.state.recipes.forEach (r => {
 			let day_id = recipes[r.meal_type_id][0].meal.day_id
 			recipes[r.meal_type_id].push(
@@ -166,10 +178,14 @@ class DragonContainer extends Component {
 				key={`${r.meal_id}_${r.recipe_id}`}
 				onDragStart={(e)=>this.onDragStart(e, r.meal_id, r.recipe_id, day_id, r.meal_type_id)}
 				draggable
-				className="dragon-box draggable"
-				style={{backgroundColor:r.bgcolor}}>
+				className="recipe-tile-container draggable"
+				>
+					<img src = {r.image_url} className="recipe-image"/>
 					<div className="recipe-title">{r.name}</div>
-					<img src = {r.image_url} />
+						<div className = "recipe-details"> 
+							{r.metrics.calories} calories, ${(r.metrics.cost / 100).toFixed(2)}
+						</div>
+						<div className="recipe-more-details">View Details</div>
 				</div>
 			)
 		});
@@ -198,19 +214,40 @@ class DragonContainer extends Component {
 				<div key={dt.id}>
 				<div>{dt.calories}</div>
 				<div>{dt.time}</div>
-				<div>{dt.cost / 100}</div>
+				<div>{(dt.cost / 100).toFixed(2)}</div>
 			</div>		
 
 			)
 
 
+		let abridged_meals = ["Add", "Data", "Please"]
+		let handleClickCollapse = this.handleClickCollapse
+		let meal_times = []
+		let i
+		abridged_meals.forEach(function(meal, i) {
+			meal_times.push(
+				<div key={`${meal}`}>
+				<div className={`collapsible ${i}`} onClick={handleClickCollapse}>
+				{meal}
+				</div>
+					<div className="content">
+						<div className="container">
+							{used_recipes.slice(i,i+7)}
+						</div>
+					</div>	
+				</div>
+			)
+			
+		})
+
 		return (
 			<div className="container-drag">
     		<h2 className="header" style={{backgroundColor:"green"}}>Week of {this.state.week_of}</h2>
-				<div className="container cutting-board">
-					{used_recipes}
-					{daily_totals}
-				</div>
+
+{meal_times}
+<div className="container">
+{daily_totals}
+</div>
 				<div >
 					<UnusedTile
 						key="unused"
