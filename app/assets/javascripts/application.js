@@ -12,5 +12,3 @@
 //
 //= require activestorage
 //= require_tree .
-
-$(function(){ $(document).foundation(); });

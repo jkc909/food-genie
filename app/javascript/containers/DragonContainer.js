@@ -13,7 +13,8 @@ class DragonContainer extends Component {
 	};
 
 	componentDidMount() {
-		let id = this.props.params.id
+		debugger;
+		let id = this.props.match.params.id
 		this.fetchRecipeData(id)
 	};
 
