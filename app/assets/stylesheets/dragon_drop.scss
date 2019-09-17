@@ -1,13 +1,45 @@
+.recipe-title {
+	grid-area: title;
+	height: 50px;
+	display: flex;
+    justify-content: center;
+	align-items: center;   
+	overflow: ellipsis;
+	padding: 5%;
+	font-weight: bold;
+}
 
-
-.dragon-box {
+.recipe-image {
+	grid-area: image;
 	height: 100px;
-	width: 100px;
+    width: 100%;
+    overflow: hidden;
+	position: relative;
 }
 
-.dragon-box-drag-hover {
-	background-color: green;
+.recipe-details {
+	grid-area: details;
+	display: flex;
+    justify-content: center;
+	align-items: center;   
 }
+
+.recipe-more-details {
+	grid-area: more-details;
+}
+
+.recipe-tile-container {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: auto;
+	grid-gap: 2px;
+	grid-template-areas: 
+		"image"
+		"title"
+		"details"
+		"more-details";
+}
+
 
 .unused-container {
 	width: 80%;
@@ -16,12 +48,10 @@
 }
 
 .meal-container {
-	width: 150px;
-	height: 150px;
-	background-color: orange;
+	width: 100%;
+	height: 200px;
+	background-color: rgb(255, 248, 246);
 }
-
-
 
 
 // .unused-container:hover {
@@ -33,3 +63,32 @@
 // .droppable:hover,.droppable.hover{
 // 	background-color: purple;
 // }
+
+
+// .background-image{
+// 	// height: 100vh;
+// 	display:flex;
+// 	min-width: 100%;
+// 	// height: 100%;
+// 	background: image-url("background_image.jpg");
+// 	background-position: center;
+// 	background-size: cover;
+// 	// background-attachment: fixed;
+//   }
+
+.cutting-board {
+	// display:flex;
+	background-image: image-url("cutting_board.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	// background-attachment: fixed;
+	background-size: 100% 100%;
+}
+
+.center {
+  margin: auto;
+  width: 100%;
+  padding: 10px;
+  align-content: center;
+  display: flex;
+}
