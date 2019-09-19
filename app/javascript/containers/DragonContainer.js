@@ -148,7 +148,6 @@ class DragonContainer extends Component {
 				recipes: recipes,
 				daily_totals: daily_totals
 			});
-			
 				let update_meals = {meal_id: old_meal_id, meal_type_id: meal_type_id, update_totals: update_totals}
 				this.updateWeek(update_meals)
 		}
@@ -169,24 +168,23 @@ class DragonContainer extends Component {
 		this.state.meals.forEach (m => {
 			recipes[m.id] = [{"meal": m}]
 		})
-
-
-		
 		this.state.recipes.forEach (r => {
 			let day_id = recipes[r.meal_type_id][0].meal.day_id
 			recipes[r.meal_type_id].push(
 				<div
-				key={`${r.meal_id}_${r.recipe_id}`}
-				onDragStart={(e)=>this.onDragStart(e, r.meal_id, r.recipe_id, day_id, r.meal_type_id)}
-				draggable
-				className="recipe-tile-container draggable"
+					key={`${r.meal_id}_${r.recipe_id}`}
+					onDragStart={(e)=>this.onDragStart(e, r.meal_id, r.recipe_id, day_id, r.meal_type_id)}
+					draggable
+					className="recipe-tile-container draggable"
 				>
-					<img src = {r.image_url} className="recipe-image"/>
-					<div className="recipe-title">{r.name}</div>
-						<div className = "recipe-details"> 
-							{r.metrics.calories} calories, ${(r.metrics.cost / 100).toFixed(2)}
-						</div>
-						<div className="recipe-more-details">View Details</div>
+				<img src = {r.image_url} className="recipe-image"/>
+				<div className="recipe-title">{r.name}</div>
+					<div className = "recipe-details"> 
+						{r.metrics.calories} calories, ${(r.metrics.cost / 100).toFixed(2)}
+					</div>
+					<div className="recipe-more-details">
+						View Details
+					</div>
 				</div>
 			)
 		});
@@ -211,26 +209,23 @@ class DragonContainer extends Component {
 		)
 		days = [...new Set(days)]; 
 
-			let daily_totals = this.state.daily_totals.map(dt =>
-				<div key={dt.id}>
+		let daily_totals = this.state.daily_totals.map(dt =>
+			<div key={dt.id}>
 				<div>{dt.calories}</div>
 				<div>{dt.time}</div>
 				<div>{(dt.cost / 100).toFixed(2)}</div>
 			</div>		
-
-			)
-
+		)
 
 		let abridged_meals = ["Add", "Data", "Please"]
 		let handleClickCollapse = this.handleClickCollapse
 		let meal_times = []
-		let i
 		abridged_meals.forEach(function(meal, i) {
 			meal_times.push(
 				<div key={`${meal}`}>
-				<div className={`collapsible ${i}`} onClick={handleClickCollapse}>
-				{meal}
-				</div>
+					<div className={`collapsible ${i}`} onClick={handleClickCollapse}>
+					{meal}
+					</div>
 					<div className="content">
 						<div className="container">
 							{used_recipes.slice(i,i+7)}
@@ -238,17 +233,19 @@ class DragonContainer extends Component {
 					</div>	
 				</div>
 			)
-			
 		})
 
 		return (
 			<div className="container-drag">
-    		<h2 className="header" style={{backgroundColor:"green"}}>Week of {this.state.week_of}</h2>
-
-{meal_times}
-<div className="container">
-{daily_totals}
-</div>
+				<h2 className="header" style={{backgroundColor:"green"}}>
+					Week of {this.state.week_of}
+				</h2>
+				<div>
+					{meal_times}
+				</div>
+				<div className="container">
+					{daily_totals}
+				</div>
 				<div >
 					<UnusedTile
 						key="unused"
@@ -256,7 +253,7 @@ class DragonContainer extends Component {
 						onDragOver={this.onDragOver}
 						onDragLeave={this.onDragLeave}
 						onDrop={this.onDrop}
-						/>
+					/>
 				</div>
  			</div>
 		);
