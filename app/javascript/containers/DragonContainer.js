@@ -13,7 +13,6 @@ class DragonContainer extends Component {
 	};
 
 	componentDidMount() {
-		debugger;
 		let id = this.props.match.params.id
 		this.fetchRecipeData(id)
 	};
@@ -165,8 +164,10 @@ class DragonContainer extends Component {
 
 	render() {
 		let recipes = []
+		let just_names = []
 		this.state.meals.forEach (m => {
 			recipes[m.id] = [{"meal": m}]
+			just_names[m.id] = [{"meal": m}]
 		})
 		this.state.recipes.forEach (r => {
 			let day_id = recipes[r.meal_type_id][0].meal.day_id
@@ -187,10 +188,14 @@ class DragonContainer extends Component {
 					</div>
 				</div>
 			)
+			just_names[r.meal_type_id].push(
+				<div key = {`ohay ${r.meal_type_id}`} className="recipe-title">{r.name}</div>
+			)
 		});
 		
 		let unused_recipes = recipes[1]
 		delete recipes[1]
+		delete just_names[1]
 		let used_recipes = Object.keys(recipes).map(meal_id => 
 			<div key={meal_id}>
 				{recipes[meal_id][0].meal.day}
@@ -218,13 +223,30 @@ class DragonContainer extends Component {
 		)
 
 		let abridged_meals = ["Add", "Data", "Please"]
+
+		// let meal_time_bridges = Object.keys(recipes).map(meal_id => 
+		// 	<div key={`abridged ${meal_id}`}>
+		// 		<div>
+		// 			{recipes[meal_id][1]}
+		// 		</div>
+		// 	</div>
+		// )
+
+		// let abridged_meals = []
+		// let i
+		// for(i = 0; i < 3; i++) {
+		// 	abridged_meals.push(
+		// 		<div key = {`container ${i}`} className={`container ${i}`}>{just_names.slice(i,i+7)}</div>
+		// 	)
+		// }
+
 		let handleClickCollapse = this.handleClickCollapse
 		let meal_times = []
 		abridged_meals.forEach(function(meal, i) {
 			meal_times.push(
-				<div key={`${meal}`}>
+				<div key={`collapsiblecontainer ${i}`}>
 					<div className={`collapsible ${i}`} onClick={handleClickCollapse}>
-					{meal}
+						{just_names.slice(i,i+7)}
 					</div>
 					<div className="content">
 						<div className="container">
@@ -234,6 +256,7 @@ class DragonContainer extends Component {
 				</div>
 			)
 		})
+
 
 		return (
 			<div className="container-drag">
