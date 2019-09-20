@@ -39,7 +39,7 @@ class DragonContainer extends Component {
 	}
 	
 	updateWeek(recipes) {
-		fetch(`/api/v1/weeks/${this.props.params.id}`, {
+		fetch(`/api/v1/weeks/${this.props.match.params.id}`, {
 			method: 'PATCH',
 			body: JSON.stringify({recipes}),
 			credentials: 'same-origin',
@@ -154,7 +154,7 @@ class DragonContainer extends Component {
 
 	handleClickCollapse = (ev) => {
 		document.querySelectorAll(".collapsible").forEach(function(collapsible) {
-			if (ev.target.classList[1] == collapsible.classList[1]){
+			if (ev.target.classList[2] == collapsible.classList[2]){
 				collapsible.nextElementSibling.style.maxHeight = collapsible.nextElementSibling.scrollHeight + "px";
 			} else {
 				collapsible.nextElementSibling.style.maxHeight = null;
@@ -189,13 +189,14 @@ class DragonContainer extends Component {
 				</div>
 			)
 			just_names[r.meal_type_id].push(
-				<div key = {`ohay ${r.meal_type_id}`} className="recipe-title">{r.name}</div>
+				// <div key = {`ohay ${r.meal_type_id}`} className="recipe-title">{r.name}</div>
+				r.name
 			)
 		});
 		
 		let unused_recipes = recipes[1]
 		delete recipes[1]
-		delete just_names[1]
+
 		let used_recipes = Object.keys(recipes).map(meal_id => 
 			<div key={meal_id}>
 				{recipes[meal_id][0].meal.day}
@@ -208,7 +209,11 @@ class DragonContainer extends Component {
 				</div>
 			</div>
 		)
-		
+
+		let bridges = just_names.map((name, i) => 
+			<div key = {`abridged ${i}`} className=""> {name[1]} </div>
+		)
+
 		let days = this.state.meals.map (m => 
 			m.day
 		)
@@ -224,33 +229,18 @@ class DragonContainer extends Component {
 
 		let abridged_meals = ["Add", "Data", "Please"]
 
-		// let meal_time_bridges = Object.keys(recipes).map(meal_id => 
-		// 	<div key={`abridged ${meal_id}`}>
-		// 		<div>
-		// 			{recipes[meal_id][1]}
-		// 		</div>
-		// 	</div>
-		// )
-
-		// let abridged_meals = []
-		// let i
-		// for(i = 0; i < 3; i++) {
-		// 	abridged_meals.push(
-		// 		<div key = {`container ${i}`} className={`container ${i}`}>{just_names.slice(i,i+7)}</div>
-		// 	)
-		// }
-
+		bridges.splice(0, 2)
 		let handleClickCollapse = this.handleClickCollapse
 		let meal_times = []
 		abridged_meals.forEach(function(meal, i) {
 			meal_times.push(
 				<div key={`collapsiblecontainer ${i}`}>
-					<div className={`collapsible ${i}`} onClick={handleClickCollapse}>
-						{just_names.slice(i,i+7)}
+					<div className={`collapsible container ${i}`} onClick={handleClickCollapse}>
+						{bridges.splice(0,7)}
 					</div>
 					<div className="content">
 						<div className="container">
-							{used_recipes.slice(i,i+7)}
+						{used_recipes.splice(0,7)}
 						</div>
 					</div>	
 				</div>
