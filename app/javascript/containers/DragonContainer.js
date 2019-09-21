@@ -154,7 +154,7 @@ class DragonContainer extends Component {
 
 	handleClickCollapse = (ev) => {
 		document.querySelectorAll(".collapsible").forEach(function(collapsible) {
-			if (ev.target.classList[2] == collapsible.classList[2]){
+			if (ev.target.classList[2] == collapsible.classList[2] || ev.target.parentElement.classList[2] == collapsible.classList[2]){
 				collapsible.nextElementSibling.style.maxHeight = collapsible.nextElementSibling.scrollHeight + "px";
 			} else {
 				collapsible.nextElementSibling.style.maxHeight = null;
@@ -211,7 +211,7 @@ class DragonContainer extends Component {
 		)
 
 		let bridges = just_names.map((name, i) => 
-			<div key = {`abridged ${i}`} className=""> {name[1]} </div>
+			<div key = {`abridged ${i}`} className="recipe-name-abridge"> {name[1]} </div>
 		)
 
 		let days = this.state.meals.map (m => 
@@ -227,12 +227,10 @@ class DragonContainer extends Component {
 			</div>		
 		)
 
-		let abridged_meals = ["Add", "Data", "Please"]
-
 		bridges.splice(0, 2)
 		let handleClickCollapse = this.handleClickCollapse
 		let meal_times = []
-		abridged_meals.forEach(function(meal, i) {
+		for(let i = 0; i < 3; i++) {
 			meal_times.push(
 				<div key={`collapsiblecontainer ${i}`}>
 					<div className={`collapsible container ${i}`} onClick={handleClickCollapse}>
@@ -240,13 +238,12 @@ class DragonContainer extends Component {
 					</div>
 					<div className="content">
 						<div className="container">
-						{used_recipes.splice(0,7)}
+							{used_recipes.splice(0,7)}
 						</div>
 					</div>	
 				</div>
-			)
-		})
-
+			);
+		}
 
 		return (
 			<div className="container-drag">
