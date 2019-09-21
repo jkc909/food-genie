@@ -71,17 +71,16 @@ class DragonContainer extends Component {
 
 	onDragOver = (ev, id) => {
 		ev.preventDefault();
-		if (ev.target.classList[1] != "draggable") {
-			ev.dataTransfer.setData("droppable_id", id);
-			ev.target.style.background = "purple"
-		}
+		// debugger;
+		ev.dataTransfer.setData("droppable_id", id);
+		ev.target.closest("#droppable").style.background = "purple"
 	};
 
 	onDragLeave = (ev) => {
 		ev.preventDefault();
 		if (ev.target.classList[1] != "draggable") {
 			ev.dataTransfer.setData("droppable_id", "");
-			ev.target.style.background = ""
+			ev.target.closest("#droppable").style.background = ""
 		}
 	};
 
@@ -152,14 +151,21 @@ class DragonContainer extends Component {
 		}
 	};
 
-	handleClickCollapse = (ev) => {
-		document.querySelectorAll(".collapsible").forEach(function(collapsible) {
-			if (ev.target.classList[2] == collapsible.classList[2] || ev.target.parentElement.classList[2] == collapsible.classList[2]){
-				collapsible.nextElementSibling.style.maxHeight = collapsible.nextElementSibling.scrollHeight + "px";
-			} else {
-				collapsible.nextElementSibling.style.maxHeight = null;
-			} 
-		})
+	handleCollapse = (id, type) => {
+		let collapsibles = document.querySelectorAll(".collapsible")
+		let updateCollapse = (id) => {
+			for(let i = 0, len=collapsibles.length; i < len; i++ ) {
+				if (collapsibles[i].classList.contains(id)) {
+					collapsibles[i].nextElementSibling.style.maxHeight = collapsibles[i].nextElementSibling.scrollHeight + "px";
+				} else {
+					collapsibles[i].nextElementSibling.style.maxHeight = null;
+				} 
+			}
+		}
+		if (type == "drag") {
+			setTimeout(function() {updateCollapse(id)}, 500)
+		}
+		else (updateCollapse(id))
 	}
 
 	render() {
@@ -189,7 +195,6 @@ class DragonContainer extends Component {
 				</div>
 			)
 			just_names[r.meal_type_id].push(
-				// <div key = {`ohay ${r.meal_type_id}`} className="recipe-title">{r.name}</div>
 				r.name
 			)
 		});
@@ -204,7 +209,8 @@ class DragonContainer extends Component {
 					className="droppable meal-container"
 					onDragOver={(e)=>this.onDragOver(e, meal_id)}
 					onDragLeave={(e)=>this.onDragLeave(e)}
-					onDrop={(e)=>this.onDrop(e, meal_id, recipes[meal_id][0].meal.day_id)}>
+					onDrop={(e)=>this.onDrop(e, meal_id, recipes[meal_id][0].meal.day_id)}
+					id="droppable">
 					{recipes[meal_id][1]}
 				</div>
 			</div>
@@ -228,12 +234,16 @@ class DragonContainer extends Component {
 		)
 
 		bridges.splice(0, 2)
-		let handleClickCollapse = this.handleClickCollapse
 		let meal_times = []
 		for(let i = 0; i < 3; i++) {
 			meal_times.push(
 				<div key={`collapsiblecontainer ${i}`}>
-					<div className={`collapsible container ${i}`} onClick={handleClickCollapse}>
+					<div 
+						className={`collapsible container droppable ${i}`} 
+						onClick={(e)=>this.handleCollapse(i, "click")}
+						onDragEnter={(e)=>this.handleCollapse(i, "drag")}
+						onDragLeave={this.onDragLeaveCollapsible}
+					>
 						{bridges.splice(0,7)}
 					</div>
 					<div className="content">
@@ -256,7 +266,7 @@ class DragonContainer extends Component {
 				<div className="container">
 					{daily_totals}
 				</div>
-				<div >
+				<div id="droppable">
 					<UnusedTile
 						key="unused"
 						recipes={unused_recipes}
