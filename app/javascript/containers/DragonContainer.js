@@ -8,8 +8,13 @@ class DragonContainer extends Component {
 			recipes: [],
 			week_of: "",
 			meals: [],
-			daily_totals: []
+			daily_totals: [],
+			collapse_timer: "",
+			last_collapse: ""
 		};
+		this.timer = this.timer.bind(this)
+		this.handleLeaveCollapse = this.handleLeaveCollapse.bind(this)
+		this.handleCollapse = this.handleCollapse.bind(this)
 	};
 
 	componentDidMount() {
@@ -71,7 +76,6 @@ class DragonContainer extends Component {
 
 	onDragOver = (ev, id) => {
 		ev.preventDefault();
-		// debugger;
 		ev.dataTransfer.setData("droppable_id", id);
 		ev.target.closest("#droppable").style.background = "purple"
 	};
@@ -151,9 +155,16 @@ class DragonContainer extends Component {
 		}
 	};
 
+	timer = (fn, id) => {
+		this.setState({
+			collapse_timer: setTimeout(fn, 800),
+			last_collapse: id
+		})
+	}
+
 	handleCollapse = (id, type) => {
-		let collapsibles = document.querySelectorAll(".collapsible")
-		let updateCollapse = (id) => {
+		let collapsibles_all = document.querySelectorAll(".collapsible")
+		let updateCollapse = (id, collapsibles) => {
 			for(let i = 0, len=collapsibles.length; i < len; i++ ) {
 				if (collapsibles[i].classList.contains(id)) {
 					collapsibles[i].nextElementSibling.style.maxHeight = collapsibles[i].nextElementSibling.scrollHeight + "px";
@@ -163,9 +174,19 @@ class DragonContainer extends Component {
 			}
 		}
 		if (type == "drag") {
-			setTimeout(function() {updateCollapse(id)}, 500)
+			this.timer(function() {updateCollapse(id, collapsibles_all)}, id)
 		}
-		else (updateCollapse(id))
+		else (updateCollapse(id, collapsibles_all))
+	}
+
+	handleLeaveCollapse = (ev, id) => {
+		// debugger;
+		ev.stopPropagation();
+		// if (ev.target.classList.contains("collapsible") && ev.target.classList.contains(this.state.last_collapse)) {
+		if (ev.target.classList.contains("collapsible") && this.state.last_collapse == id) {
+			console.log(this.state.last_collapse)
+			clearTimeout(this.state.collapse_timer)
+		}
 	}
 
 	render() {
@@ -242,7 +263,7 @@ class DragonContainer extends Component {
 						className={`collapsible container droppable ${i}`} 
 						onClick={(e)=>this.handleCollapse(i, "click")}
 						onDragEnter={(e)=>this.handleCollapse(i, "drag")}
-						onDragLeave={this.onDragLeaveCollapsible}
+						onDragLeave={(e)=>this.handleLeaveCollapse(e, i)}
 					>
 						{bridges.splice(0,7)}
 					</div>
