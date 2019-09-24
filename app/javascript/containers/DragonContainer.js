@@ -99,17 +99,20 @@ class DragonContainer extends Component {
 			if (ev.target.classList[1] != "draggable") {
 				ev.target.style.background = ""
 			};
+			let subtract_values = (recipe, dt) => {
+				dt.calories -= recipe.metrics.calories
+				dt.fat -= recipe.metrics.fat
+				dt.carbs -= recipe.metrics.carbs
+				dt.protein -= recipe.metrics.protein
+				dt.time -= recipe.metrics.time
+				dt.cost -= recipe.metrics.cost
+				update_totals[0] = dt
+			}
 			let recipes = this.state.recipes.filter((recipe) => {
 				if (old_meal_type_id != meal_type_id && recipe.meal_type_id != 1 && recipe.meal_type_id == meal_type_id) {
 					daily_totals.filter((dt) => {
 						if (dt.day_id == day_id) {
-							dt.calories -= recipe.metrics.calories
-							dt.fat -= recipe.metrics.fat
-							dt.carbs -= recipe.metrics.carbs
-							dt.protein -= recipe.metrics.protein
-							dt.time -= recipe.metrics.time
-							dt.cost -= recipe.metrics.cost
-							update_totals[0] = dt
+							subtract_values(recipe, dt)
 						}}
 					);
 						recipe.meal_type_id = 1	
@@ -118,13 +121,7 @@ class DragonContainer extends Component {
 				if (recipe.meal_type_id != 1 && recipe.meal_type_id == old_meal_type_id && old_meal_type_id != meal_type_id) {
 					daily_totals.filter((dt) => {
 						if (dt.day_id == old_day_id && old_day_id != day_id) {
-							dt.calories -= recipe.metrics.calories
-							dt.fat -= recipe.metrics.fat
-							dt.carbs -= recipe.metrics.carbs
-							dt.protein -= recipe.metrics.protein
-							dt.time -= recipe.metrics.time
-							dt.cost -= recipe.metrics.cost
-							update_totals[0] = dt
+							subtract_values(recipe, dt)
 						}}
 					);
 				};
