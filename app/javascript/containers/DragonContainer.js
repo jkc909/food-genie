@@ -8,8 +8,7 @@ class DragonContainer extends Component {
 			recipes: [],
 			week_of: "",
 			meals: [],
-			daily_totals: [],
-			last_collapse: ""
+			daily_totals: []
 		};
 		this.collapse_timer = null
 	};
@@ -173,8 +172,12 @@ class DragonContainer extends Component {
 		else (updateCollapse(id, collapsibles_all))
 	}
 
-	handleLeaveCollapse = () => {
+	handleStopProp = () => {
 		event.stopPropagation()
+		console.log("but srsly. wtf")
+	}
+
+	handleLeaveCollapse = () => {
 		if (event.target.classList.contains("recipe-name-abridge")) {
 			event.target.closest(".collapsible").style.background = null
 		}
@@ -229,7 +232,7 @@ class DragonContainer extends Component {
 		)
 
 		let bridges = just_names.map((name, i) => 
-			<div key = {`abridged ${i}`} onDragLeave={null} className="recipe-name-abridge"> {name[1]} </div>
+			<div key = {`abridged ${i}`} onDragLeave={(e)=>this.handleStopProp()} className="recipe-name-abridge"> {name[1]} </div>
 		)
 
 		let days = this.state.meals.map (m => 
