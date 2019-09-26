@@ -9,12 +9,9 @@ class DragonContainer extends Component {
 			week_of: "",
 			meals: [],
 			daily_totals: [],
-			collapse_timer: "",
 			last_collapse: ""
 		};
-		this.timer = this.timer.bind(this)
-		this.handleLeaveCollapse = this.handleLeaveCollapse.bind(this)
-		this.handleCollapse = this.handleCollapse.bind(this)
+		this.collapse_timer = null
 	};
 
 	componentDidMount() {
@@ -76,6 +73,7 @@ class DragonContainer extends Component {
 
 	onDragOver = (ev, id) => {
 		ev.preventDefault();
+		clearTimeout(this.collapse_timer)
 		ev.dataTransfer.setData("droppable_id", id);
 		ev.target.closest("#droppable").style.background = "purple"
 	};
@@ -152,14 +150,12 @@ class DragonContainer extends Component {
 		}
 	};
 
-	timer = (fn, id) => {
-		this.setState({
-			collapse_timer: setTimeout(fn, 800),
-			last_collapse: id
-		})
+	timer = (fn) => {
+		clearTimeout(this.collapse_timer)
+		this.collapse_timer = setTimeout(fn, 500)
 	}
 
-	handleCollapse = (id, type) => {
+	handleCollapse = (id) => {
 		let collapsibles_all = document.querySelectorAll(".collapsible")
 		let updateCollapse = (id, collapsibles) => {
 			for(let i = 0, len=collapsibles.length; i < len; i++ ) {
@@ -170,19 +166,17 @@ class DragonContainer extends Component {
 				} 
 			}
 		}
-		if (type == "drag") {
-			this.timer(function() {updateCollapse(id, collapsibles_all)}, id)
+		if (event.type == "dragenter") {
+			this.timer(function() {updateCollapse(id, collapsibles_all)})
+			event.target.closest(".collapsible").style.background = "#555"
 		}
 		else (updateCollapse(id, collapsibles_all))
 	}
 
-	handleLeaveCollapse = (ev, id) => {
-		// debugger;
-		ev.stopPropagation();
-		// if (ev.target.classList.contains("collapsible") && ev.target.classList.contains(this.state.last_collapse)) {
-		if (ev.target.classList.contains("collapsible") && this.state.last_collapse == id) {
-			console.log(this.state.last_collapse)
-			clearTimeout(this.state.collapse_timer)
+	handleLeaveCollapse = () => {
+		event.stopPropagation()
+		if (event.target.classList.contains("recipe-name-abridge")) {
+			event.target.closest(".collapsible").style.background = null
 		}
 	}
 
@@ -235,7 +229,7 @@ class DragonContainer extends Component {
 		)
 
 		let bridges = just_names.map((name, i) => 
-			<div key = {`abridged ${i}`} className="recipe-name-abridge"> {name[1]} </div>
+			<div key = {`abridged ${i}`} onDragLeave={null} className="recipe-name-abridge"> {name[1]} </div>
 		)
 
 		let days = this.state.meals.map (m => 
@@ -258,9 +252,9 @@ class DragonContainer extends Component {
 				<div key={`collapsiblecontainer ${i}`}>
 					<div 
 						className={`collapsible container droppable ${i}`} 
-						onClick={(e)=>this.handleCollapse(i, "click")}
-						onDragEnter={(e)=>this.handleCollapse(i, "drag")}
-						onDragLeave={(e)=>this.handleLeaveCollapse(e, i)}
+						onClick={(e)=>this.handleCollapse(i)}
+						onDragEnter={(e)=>this.handleCollapse(i)}
+						onDragLeave={(e)=>this.handleLeaveCollapse(i)}
 					>
 						{bridges.splice(0,7)}
 					</div>
