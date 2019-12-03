@@ -11,6 +11,7 @@ class DragonContainer extends Component {
 			daily_totals: []
 		};
 		this.collapse_timer = null
+		this.hightlighted_item = null
 	};
 
 	componentDidMount() {
@@ -72,9 +73,8 @@ class DragonContainer extends Component {
 
 	onDragOver = (ev, id) => {
 		ev.preventDefault();
-		clearTimeout(this.collapse_timer)
-		ev.dataTransfer.setData("droppable_id", id);
-		ev.target.closest("#droppable").style.background = "purple"
+		clearTimeout(this.collapse_timer);
+		ev.target.closest("#droppable").style.background = "purple";
 	};
 
 	onDragLeave = (ev) => {
@@ -166,19 +166,24 @@ class DragonContainer extends Component {
 			}
 		}
 		if (event.type == "dragenter") {
-			this.timer(function() {updateCollapse(id, collapsibles_all)})
+			this.hightlighted_item = id
 			event.target.closest(".collapsible").style.background = "#555"
+			this.timer(function() {updateCollapse(id, collapsibles_all)})
 		}
 		else (updateCollapse(id, collapsibles_all))
 	}
 
 	handleStopProp = () => {
-		event.stopPropagation()
-		console.log("but srsly. wtf")
+		event.stopPropagation();
 	}
 
 	handleLeaveCollapse = () => {
-		if (event.target.classList.contains("recipe-name-abridge")) {
+		let collapsibles_all = document.querySelectorAll(".collapsible")
+		for(let i = 0, len=collapsibles_all.length; i < len; i++) {
+
+		}
+		// if (event.fromElement.classList.contains("collapsible") && (event.target.classList.contains("recipe-name-abridge")==false)) {
+		if (event.target.classList.contains(this.hightlighted_item) && (event.fromElement.classList.contains("recipe-name-abridge")==false)) {	
 			event.target.closest(".collapsible").style.background = null
 		}
 	}
