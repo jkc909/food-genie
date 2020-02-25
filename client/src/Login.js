@@ -31,7 +31,7 @@ handleSubmit = (event) => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
       hostt = 'http://localhost:3000'
   } else {
-      hostt = 'https://murmuring-sierra-33532.herokuapp.com'
+      hostt = 'https://food-genie-jkc.herokuapp.com'
   }
   axios.post(`${hostt}/login`, {user}, {withCredentials: true})
       .then(response => {
