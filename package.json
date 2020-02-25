@@ -1,24 +1,13 @@
-{
-  "name": "food-genie",
-  "private": true,
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.19",
-    "@fortawesome/free-solid-svg-icons": "^5.9.0",
-    "@fortawesome/react-fontawesome": "^0.1.4",
-    "@rails/webpacker": "^4.0.7",
-    "@babel/preset-react": "7.0.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-router-dom": "^5.0.1",
-    "redbox-react": "1.6.0",
-    "tar": ">=4.4.2"
-  },
-  "devDependencies": {
-    "webpack-dev-server": "^3.8.1"
-  },
-  "scripts": {
-    "start": "./bin/webpack-dev-server",
-    "test": "node_modules/.bin/karma start karma.conf.js"
-  }
+{  
+    "name": "food-genie",
+    "license": "MIT",
+     "engines": {
+        "node": "12.10.0",
+        "yarn": "1.17.3"
+    },
+    "scripts": {
+        "build": "yarn --cwd client install && yarn --cwd client build",
+        "deploy": "cp -a client/build/. public/",
+        "heroku-postbuild": "yarn build && yarn deploy"
+    }
 }
