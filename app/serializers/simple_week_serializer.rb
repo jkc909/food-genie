@@ -51,6 +51,10 @@ class SimpleWeekSerializer < ActiveModel::Serializer
 
 	end
 
+	def week_of
+		week_of = object.week_of.strftime('%B %e, %Y')
+	end
+
 	def daily_totals
 		daily_totals = object.daily_totals.order("day_id")
 	end

@@ -1,17 +1,7 @@
 
-Rake::Task['db:migrate:reset'].invoke
 
-# User.destroy_all
-# Week.destroy_all
-# PrepCategory.destroy_all
-# Recipe.destroy_all
-# Meal.destroy_all
-# MealType.destroy_all
-# RecipeNutritionValue.destroy_all
-# Ingredient.destroy_all
-# RecipeIngredient.destroy_all
-# Day.destroy_all
-# DailyTotal.destroy_all
+AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+
 
 p "create Users"
 	user = User.create!(email: "admin@foodgenie.com", password: "password")
