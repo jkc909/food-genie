@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios'
 import {Link} from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 
@@ -27,30 +26,14 @@ handleSubmit = (event) => {
           email: email,
           password: password
         }
-    let hostt=""
-    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-      hostt = 'http://localhost:3000'
-  } else {
-      hostt = 'https://food-genie-jkc.herokuapp.com'
-  }
-  axios.post(`${hostt}/login`, {user}, {withCredentials: true})
-      .then(response => {
-        if (response.data.logged_in) {
-          this.props.handleLogin(response.data)
-        } else {
-          this.setState({
-            errors: response.data.errors
-          })
-        }
-      })
-      .catch(error => console.log('api errors:', error))
+    this.props.handleLoginClick(user)
     };
 
 handleErrors = () => {
     return (
       <div>
         <ul>
-        {this.state.errors.map(error => {
+        {this.props.errors.map(error => {
         return <li key={error}>{error}</li>
           })}
         </ul>
@@ -61,7 +44,7 @@ render() {
     const {email, password} = this.state
 return (
       <div>
-        <h1>Log In</h1>
+        <h3>Log In</h3>
         <form onSubmit={this.handleSubmit}>
           <input
             placeholder="email"
@@ -87,7 +70,7 @@ return (
         </form>
         <div>
           {
-            this.state.errors ? this.handleErrors() : null
+            this.props.errors ? this.handleErrors() : null
           }
         </div>
       </div>
