@@ -13,7 +13,7 @@ class MainContainer extends Component {
     constructor(props){
         super(props);
         this.state = {
-			user_id: props.user.id,
+			user_id: this.props.user.id,
 			recipes: [],
 			week_id: 0,
             week_of: "",
@@ -31,7 +31,7 @@ class MainContainer extends Component {
     }
     
 	fetchRecipeData(date) {
-		fetch(`/api/users/${this.props.user.id}/weeks/${date}`)
+		fetch(`/api/users/${this.state.user_id}/weeks/${date}`)
 		.then(response => {
 			if (response.ok) {
 				return response;
