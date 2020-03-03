@@ -19,11 +19,8 @@ class MainContainer extends Component {
             week_of: "",
             meals: [],
 			daily_totals: [],
-			grocery_list: [],
 			groceryOpen: false,
 		}
-		this.fetchGroceryList=this.fetchGroceryList.bind(this)
-		this.updateGroceryList=this.updateGroceryList.bind(this)
     }
 
     componentDidMount(){
@@ -73,56 +70,6 @@ class MainContainer extends Component {
 		.catch(error => {
 			alert("Error while updating Week")
 		})
-	}
-
-	updateGroceryList(grocery) {
-		fetch(`/api/users/${this.props.user.id}/grocery/1`, {
-			method: 'PATCH',
-			body: JSON.stringify({grocery}),
-			credentials: 'same-origin',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			}
-		})
-		.then(response => {
-			if (response.ok) {
-				return response
-			} else {
-				let errorMessage = `${response.status} (${response.statusText})`, error = new Error(errorMessage)
-				throw(error)
-			}
-		})
-		.catch(error => {
-			alert("Error while updating Week")
-		})
-	}
-
-	fetchGroceryList(){
-		fetch(`/api/users/${this.state.user_id}/grocery/${this.state.week_id}`)
-		.then(response => {
-			if (response.ok) {
-				return response;
-			} else {
-				let errorMessage = `${response.status} (${response.statusText})`, error = new Error(errorMessage);
-				throw error;
-			}
-		})
-		.then(response => response.json())
-		.then(body => {
-			this.setState({ 
-				grocery_list: body
-			})
-		})
-	}
-
-	toggleGrocerySelect = (grocery,new_state) => {
-		this.updateGroceryList(grocery) 
-
-		this.setState({
-			grocery_list: new_state
-		})
-
 	}
 
 	selectWeek = (date) => {
@@ -293,11 +240,8 @@ class MainContainer extends Component {
 					/>
 
 					<GroceryListModal
-						fetchGroceryList={this.fetchGroceryList}
-						updateGroceryList={this.toggleGrocerySelect}
 						user_id={this.state.user_id}
 						week_id={this.state.week_id}
-						grocery_list={this.state.grocery_list}
 					/>
 					</div>
 

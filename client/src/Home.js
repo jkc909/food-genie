@@ -104,7 +104,7 @@ class Home extends Component{
     } else {
       login_check = 
         <MainContainer 
-        user={this.state.user}
+          user={this.state.user}
         />
     }
     return(

@@ -156,8 +156,18 @@
 	grid-template-rows: auto;
 }
 
+.ingredient-grid > div:nth-child(6n+4),
+.ingredient-grid > div:nth-child(6n+5),
+.ingredient-grid > div:nth-child(6n+6) {
+	background-color: blueviolet;
+}
+
 .ingredient-name {
 	text-align: left;
+}
+
+.ingredient-checked {
+	text-decoration: line-through;
 }
 
 .center {
