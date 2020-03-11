@@ -3,14 +3,18 @@ import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import Divider from '@material-ui/core/Divider'
+import Divider from '@material-ui/core/Divider';
+import Checkbox from '@material-ui/core/Checkbox';
 
+import GroceryListTable from './GroceryListTable.jsx'
 
 let styles = {
   modal: {
     display: 'flex',
     alignItems: 'center',
+    alignContent: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
   },
   paper: {
     textAlign: 'center',
@@ -67,7 +71,6 @@ class GroceryListModal extends Component {
         g.checked = e.target.checked
 			}
     })
-    grocery_list.sort((a,b) => (a.checked > b.checked) ? 1 : (a.checked === b.checked) ? ((a.name > b.name) ? 1 : -1) : -1)
     let toggle_checked = {ingredient_id: e.target.name, checked: e.target.checked, week_id: this.props.week_id}
     this.setState({
 			grocery_list: grocery_list
@@ -124,24 +127,20 @@ class GroceryListModal extends Component {
   }
 
   render(){
-    console.log("RENDERRRRR")
-    
     const { classes } = this.props;
-
-  let grocery_list = this.state.grocery_list.map((g, i) =>
-    <Fragment key={i}>
-        <div className={`ingredient-name ${ this.isChecked(g.checked) }`}>{g.name}</div> 
-        <div>{g.amount} {g.unit}</div> 
-        <div> 
-          <input 
-            type="checkbox" 
-            name={g.ingredient_id} 
-            defaultChecked={g.checked}
-            onClick={this.handleToggleCheck}
-          />
-        </div>
-    </Fragment>
-  )
+    let grocery_list = this.state.grocery_list.map((g, i) =>
+      <Fragment key={i}>
+          <div className={`ingredient-name ${ this.isChecked(g.checked) }`}>{g.name}</div> 
+          <div className={`ingredient-name ${ this.isChecked(g.checked) }`}>{g.amount} {g.unit}</div> 
+          <div> 
+            <Checkbox 
+              name={g.ingredient_id} 
+              defaultChecked={g.checked}
+              onClick={this.handleToggleCheck}
+            />
+          </div>
+      </Fragment>
+    )
 
   return (
     <div style={{cursor: 'pointer'}}>
@@ -161,7 +160,8 @@ class GroceryListModal extends Component {
         }}
       >
         <Fade in={this.state.open}>
-          <div className={classes.paper}>
+        <GroceryListTable />
+          {/* <div className={classes.paper}>
             <h2 id="transition-modal-title" className="transition-modal-title">Grocery list for the week:</h2>
             <div className="ingredient-grid">
                 <div className="ingredient-name">Item</div> <div>Quantity</div> <div> Acquired </div>
@@ -175,12 +175,11 @@ class GroceryListModal extends Component {
                 {grocery_list}
             </div>
 
-          </div>
+          </div> */}
         </Fade>
       </Modal>
     </div>
-  );
-}
+  )};
 }
 
 export default withStyles(styles)(GroceryListModal);
